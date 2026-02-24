@@ -22,15 +22,18 @@ export default async function ProductPage({
   if (!product) notFound();
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-8">
-      <nav className="mb-6 text-sm text-muted-foreground">
-        <Link href="/produkty" className="hover:text-foreground">
+    <div className="mx-auto max-w-7xl px-4 py-10">
+      <nav className="mb-8 text-sm text-muted-foreground">
+        <Link
+          href="/produkty"
+          className="transition-colors hover:text-foreground"
+        >
           Produkty
         </Link>
         {" / "}
         <Link
           href={`/produkty?kategoria=${product.category.slug}`}
-          className="hover:text-foreground"
+          className="transition-colors hover:text-foreground"
         >
           {product.category.name}
         </Link>
@@ -38,9 +41,9 @@ export default async function ProductPage({
         <span className="text-foreground">{product.name}</span>
       </nav>
 
-      <div className="grid gap-8 lg:grid-cols-2">
+      <div className="grid gap-12 lg:grid-cols-2">
         {/* Image */}
-        <div className="aspect-square overflow-hidden rounded-lg bg-muted">
+        <div className="aspect-square overflow-hidden rounded-2xl bg-muted/50 shadow-card ring-1 ring-border/40">
           {product.imageUrl ? (
             <Image
               src={product.imageUrl}
@@ -58,18 +61,24 @@ export default async function ProductPage({
         </div>
 
         {/* Details */}
-        <div>
-          <Badge variant="secondary" className="mb-4">
+        <div className="flex flex-col">
+          <Badge
+            variant="secondary"
+            className="mb-4 w-fit text-xs font-medium uppercase tracking-wider"
+          >
             {product.category.name}
           </Badge>
-          <h1 className="mb-4 text-3xl font-bold">{product.name}</h1>
+          <h1 className="mb-4 text-3xl font-bold tracking-tight lg:text-4xl">
+            {product.name}
+          </h1>
           <p className="mb-6 text-3xl font-bold text-primary">
             {formatPrice(product.price)}
           </p>
 
           <div className="mb-6">
             {product.stock > 0 ? (
-              <span className="text-sm text-green-600">
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-green-500/10 px-3 py-1 text-sm font-medium text-green-700 dark:text-green-400">
+                <span className="size-2 rounded-full bg-green-500" />
                 Dostępny (stan: {product.stock})
               </span>
             ) : (
@@ -89,9 +98,9 @@ export default async function ProductPage({
             />
           )}
 
-          <div className="mt-8">
+          <div className="mt-10 rounded-xl border border-border/60 bg-muted/30 p-6">
             <h2 className="mb-3 text-lg font-semibold">Opis produktu</h2>
-            <p className="whitespace-pre-line text-muted-foreground">
+            <p className="whitespace-pre-line leading-relaxed text-muted-foreground">
               {product.description}
             </p>
           </div>

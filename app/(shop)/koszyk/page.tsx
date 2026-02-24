@@ -14,28 +14,35 @@ export default function CartPage() {
 
   if (items.length === 0) {
     return (
-      <div className="mx-auto max-w-7xl px-4 py-16 text-center">
-        <ShoppingCart className="mx-auto mb-4 size-16 text-muted-foreground/30" />
+      <div className="mx-auto max-w-7xl px-4 py-24 text-center">
+        <div className="mx-auto mb-6 flex size-20 items-center justify-center rounded-2xl bg-muted/50">
+          <ShoppingCart className="size-10 text-muted-foreground/40" />
+        </div>
         <h1 className="mb-2 text-2xl font-bold">Koszyk jest pusty</h1>
-        <p className="mb-6 text-muted-foreground">
+        <p className="mb-8 text-muted-foreground">
           Dodaj produkty do koszyka, aby złożyć zamówienie.
         </p>
         <Link href="/produkty">
-          <Button>Przeglądaj produkty</Button>
+          <Button size="lg" className="shadow-md">
+            Przeglądaj produkty
+          </Button>
         </Link>
       </div>
     );
   }
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-8">
-      <h1 className="mb-6 text-3xl font-bold">Koszyk</h1>
+    <div className="mx-auto max-w-7xl px-4 py-10">
+      <h1 className="mb-8 text-3xl font-bold">Koszyk</h1>
 
       <div className="grid gap-8 lg:grid-cols-3">
-        <div className="space-y-3 lg:col-span-2">
+        <div className="space-y-4 lg:col-span-2">
           {items.map((item) => (
-            <Card key={item.productId}>
-              <CardContent className="flex items-center gap-4 py-4">
+            <Card
+              key={item.productId}
+              className="border-border/60 shadow-soft transition-smooth hover:shadow-card"
+            >
+              <CardContent className="flex items-center gap-4 py-5">
                 <Link
                   href={`/produkty/${item.slug}`}
                   className="size-20 shrink-0 overflow-hidden rounded-md bg-muted"
@@ -100,7 +107,7 @@ export default function CartPage() {
         </div>
 
         <div>
-          <Card>
+          <Card className="sticky top-24 border-border/60 shadow-card">
             <CardContent className="p-6">
               <h2 className="mb-4 text-lg font-semibold">Podsumowanie</h2>
               <div className="space-y-2 text-sm">
@@ -126,7 +133,10 @@ export default function CartPage() {
                 </div>
               </div>
               <Link href="/zamowienie" className="mt-4 block">
-                <Button className="w-full" size="lg">
+                <Button
+                  className="w-full shadow-md transition-all hover:shadow-lg"
+                  size="lg"
+                >
                   Złóż zamówienie
                 </Button>
               </Link>

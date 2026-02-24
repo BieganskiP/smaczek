@@ -30,12 +30,12 @@ export default function RegisterPage() {
   }, [state.success, router]);
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
-      <Card className="w-full max-w-md">
+    <div className="flex min-h-screen items-center justify-center bg-background px-4 py-8">
+      <Card className="w-full max-w-lg border-border/60 shadow-card">
         <CardHeader className="text-center">
           <CardTitle>Utwórz konto</CardTitle>
           <CardDescription>
-            Wprowadź swoje dane, aby utworzyć konto
+            Wprowadź swoje dane – adres będzie używany przy dostawie zamówień
           </CardDescription>
         </CardHeader>
         <form action={formAction}>
@@ -45,14 +45,35 @@ export default function RegisterPage() {
                 {state.error}
               </div>
             )}
-            <div className="space-y-2">
-              <Label htmlFor="name">Imię</Label>
-              <Input
-                id="name"
-                name="name"
-                placeholder="Jan Kowalski"
-                required
-              />
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="firstName">Imię</Label>
+                <Input
+                  id="firstName"
+                  name="firstName"
+                  placeholder="Jan"
+                  required
+                />
+                {state.fieldErrors?.firstName && (
+                  <p className="text-sm text-destructive">
+                    {state.fieldErrors.firstName}
+                  </p>
+                )}
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="lastName">Nazwisko</Label>
+                <Input
+                  id="lastName"
+                  name="lastName"
+                  placeholder="Kowalski"
+                  required
+                />
+                {state.fieldErrors?.lastName && (
+                  <p className="text-sm text-destructive">
+                    {state.fieldErrors.lastName}
+                  </p>
+                )}
+              </div>
             </div>
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
@@ -63,6 +84,65 @@ export default function RegisterPage() {
                 placeholder="jan@example.com"
                 required
               />
+              {state.fieldErrors?.email && (
+                <p className="text-sm text-destructive">
+                  {state.fieldErrors.email}
+                </p>
+              )}
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="phone">Telefon</Label>
+              <Input
+                id="phone"
+                name="phone"
+                type="tel"
+                placeholder="123456789"
+                required
+              />
+              {state.fieldErrors?.phone && (
+                <p className="text-sm text-destructive">
+                  {state.fieldErrors.phone}
+                </p>
+              )}
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="address">Ulica i numer</Label>
+              <Input
+                id="address"
+                name="address"
+                placeholder="ul. Kwiatowa 10/5"
+                required
+              />
+              {state.fieldErrors?.address && (
+                <p className="text-sm text-destructive">
+                  {state.fieldErrors.address}
+                </p>
+              )}
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="postalCode">Kod pocztowy</Label>
+                <Input
+                  id="postalCode"
+                  name="postalCode"
+                  placeholder="00-000"
+                  required
+                />
+                {state.fieldErrors?.postalCode && (
+                  <p className="text-sm text-destructive">
+                    {state.fieldErrors.postalCode}
+                  </p>
+                )}
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="city">Miasto</Label>
+                <Input id="city" name="city" placeholder="Warszawa" required />
+                {state.fieldErrors?.city && (
+                  <p className="text-sm text-destructive">
+                    {state.fieldErrors.city}
+                  </p>
+                )}
+              </div>
             </div>
             <div className="space-y-2">
               <Label htmlFor="password">Hasło</Label>
@@ -73,6 +153,11 @@ export default function RegisterPage() {
                 placeholder="Min. 6 znaków"
                 required
               />
+              {state.fieldErrors?.password && (
+                <p className="text-sm text-destructive">
+                  {state.fieldErrors.password}
+                </p>
+              )}
             </div>
           </CardContent>
           <CardFooter className="flex flex-col gap-4">

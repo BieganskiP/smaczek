@@ -37,7 +37,12 @@ export function AddToCartButton({ product }: Props) {
         onChange={(e) => setQuantity(Math.max(1, parseInt(e.target.value) || 1))}
         className="w-20"
       />
-      <Button onClick={handleAdd} size="lg" className="gap-2" disabled={added}>
+      <Button
+        onClick={handleAdd}
+        size="lg"
+        className="gap-2 shadow-md transition-all hover:shadow-lg disabled:opacity-70"
+        disabled={added}
+      >
         {added ? (
           <>
             <Check className="size-4" />

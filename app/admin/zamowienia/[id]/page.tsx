@@ -101,7 +101,7 @@ export default async function AdminOrderDetailPage({
                   <span className="text-muted-foreground">
                     Konto użytkownika:
                   </span>{" "}
-                  {order.user.name} ({order.user.email})
+                  {order.user.firstName} {order.user.lastName} ({order.user.email})
                 </p>
               )}
             </CardContent>

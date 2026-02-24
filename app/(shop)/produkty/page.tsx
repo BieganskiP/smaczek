@@ -2,11 +2,8 @@ import { prisma } from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
 import Link from "next/link";
-import Image from "next/image";
-import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { formatPrice } from "@/lib/utils";
-import { PawPrint } from "lucide-react";
+import { ProductCard } from "@/components/shop/product-card";
 
 export default async function ProductsPage({
   searchParams,
@@ -36,15 +33,19 @@ export default async function ProductsPage({
   ]);
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-8">
-      <h1 className="mb-6 text-3xl font-bold">
+    <div className="mx-auto max-w-7xl px-4 py-10">
+      <h1 className="mb-8 text-3xl font-bold">
         {currentCategory ? currentCategory.name : "Wszystkie produkty"}
       </h1>
 
       {/* Category filters */}
-      <div className="mb-8 flex flex-wrap gap-2">
+      <div className="mb-10 flex flex-wrap gap-2">
         <Link href="/produkty">
-          <Button variant={!kategoria ? "default" : "outline"} size="sm">
+          <Button
+            variant={!kategoria ? "default" : "outline"}
+            size="sm"
+            className="shadow-sm transition-all hover:shadow-md"
+          >
             Wszystkie
           </Button>
         </Link>
@@ -53,6 +54,7 @@ export default async function ProductsPage({
             <Button
               variant={kategoria === cat.slug ? "default" : "outline"}
               size="sm"
+              className="shadow-sm transition-all hover:shadow-md"
             >
               {cat.name} ({cat._count.products})
             </Button>
@@ -62,43 +64,13 @@ export default async function ProductsPage({
 
       {/* Product grid */}
       {products.length === 0 ? (
-        <div className="py-16 text-center text-muted-foreground">
+        <div className="rounded-xl border border-dashed border-border py-20 text-center text-muted-foreground">
           Brak produktów w tej kategorii.
         </div>
       ) : (
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {products.map((product) => (
-            <Link key={product.id} href={`/produkty/${product.slug}`}>
-              <Card className="overflow-hidden transition-shadow hover:shadow-md">
-                <div className="aspect-square bg-muted">
-                  {product.imageUrl ? (
-                    <Image
-                      src={product.imageUrl}
-                      alt={product.name}
-                      width={400}
-                      height={400}
-                      className="size-full object-cover"
-                    />
-                  ) : (
-                    <div className="flex size-full items-center justify-center">
-                      <PawPrint className="size-12 text-muted-foreground/30" />
-                    </div>
-                  )}
-                </div>
-                <CardContent className="p-4">
-                  <p className="text-xs text-muted-foreground">
-                    {product.category.name}
-                  </p>
-                  <h3 className="mt-1 font-semibold">{product.name}</h3>
-                  <p className="mt-1 line-clamp-2 text-sm text-muted-foreground">
-                    {product.description}
-                  </p>
-                  <p className="mt-2 text-lg font-bold text-primary">
-                    {formatPrice(product.price)}
-                  </p>
-                </CardContent>
-              </Card>
-            </Link>
+            <ProductCard key={product.id} product={product} />
           ))}
         </div>
       )}

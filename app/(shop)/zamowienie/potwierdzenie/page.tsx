@@ -30,17 +30,19 @@ export default async function ConfirmationPage({
   };
 
   return (
-    <div className="mx-auto max-w-2xl px-4 py-16">
+    <div className="mx-auto max-w-2xl px-4 py-20">
       <ClearCartOnMount />
-      <div className="mb-8 text-center">
-        <CheckCircle className="mx-auto mb-4 size-16 text-primary" />
+      <div className="mb-10 text-center">
+        <div className="mx-auto mb-6 flex size-20 items-center justify-center rounded-2xl bg-primary/10 shadow-card">
+          <CheckCircle className="size-12 text-primary" />
+        </div>
         <h1 className="mb-2 text-3xl font-bold">Zamówienie złożone!</h1>
         <p className="text-muted-foreground">
           Twoje zamówienie nr <strong>{order.id}</strong> zostało przyjęte.
         </p>
       </div>
 
-      <Card>
+      <Card className="border-border/60 shadow-card">
         <CardHeader>
           <div className="flex items-center justify-between">
             <CardTitle className="text-lg">Szczegóły zamówienia</CardTitle>
@@ -81,9 +83,11 @@ export default async function ConfirmationPage({
         </CardContent>
       </Card>
 
-      <div className="mt-6 text-center">
+      <div className="mt-8 text-center">
         <Link href="/produkty">
-          <Button variant="outline">Kontynuuj zakupy</Button>
+          <Button variant="outline" size="lg" className="shadow-sm">
+            Kontynuuj zakupy
+          </Button>
         </Link>
       </div>
     </div>

@@ -2,11 +2,10 @@ import { prisma } from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
 import Link from "next/link";
-import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { formatPrice } from "@/lib/utils";
 import { ArrowRight, PawPrint, Truck, Shield, AlertCircle } from "lucide-react";
+import { ProductCard } from "@/components/shop/product-card";
 
 async function getHomePageData() {
   try {
@@ -28,7 +27,8 @@ async function getHomePageData() {
     return {
       featuredProducts: [],
       categories: [],
-      dbError: error instanceof Error ? error.message : "Błąd połączenia z bazą",
+      dbError:
+        error instanceof Error ? error.message : "Błąd połączenia z bazą",
     };
   }
 }
@@ -59,22 +59,30 @@ export default async function HomePage() {
         </div>
       )}
       {/* Hero */}
-      <section className="bg-linear-to-b from-primary/5 to-background py-20">
-        <div className="mx-auto max-w-7xl px-4 text-center">
-          <div className="mx-auto mb-6 flex size-16 items-center justify-center rounded-full bg-primary/10">
-            <PawPrint className="size-8 text-primary" />
+      <section className="relative overflow-hidden py-24">
+        <div className="absolute inset-0 bg-linear-to-b from-primary/10 via-primary/5 to-transparent" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,hsl(var(--primary)/0.15),transparent_50%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,hsl(var(--primary)/0.08),transparent_50%)]" />
+        <div className="relative mx-auto max-w-7xl px-4 text-center">
+          <div className="mx-auto mb-8 flex size-20 items-center justify-center rounded-2xl bg-primary/10 shadow-card">
+            <PawPrint className="size-10 text-primary" />
           </div>
-          <h1 className="mb-4 text-4xl font-bold tracking-tight sm:text-5xl">
+          <h1 className="mb-5 text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
             Najlepsza karma
             <br />
-            <span className="text-primary">dla Twojego pupila</span>
+            <span className="bg-linear-to-r from-primary to-primary/80 bg-clip-text text-transparent">
+              dla Twojego pupila
+            </span>
           </h1>
-          <p className="mx-auto mb-8 max-w-2xl text-lg text-muted-foreground">
+          <p className="mx-auto mb-10 max-w-2xl text-lg leading-relaxed text-muted-foreground">
             Szeroki wybór wysokiej jakości karmy dla psów, kotów i innych
             zwierząt domowych. Dostarczamy prosto pod Twoje drzwi.
           </p>
           <Link href="/produkty">
-            <Button size="lg" className="gap-2">
+            <Button
+              size="lg"
+              className="gap-2 shadow-md transition-all hover:-translate-y-0.5 hover:shadow-lg"
+            >
               Przeglądaj produkty
               <ArrowRight className="size-4" />
             </Button>
@@ -83,59 +91,65 @@ export default async function HomePage() {
       </section>
 
       {/* Features */}
-      <section className="border-y py-12">
-        <div className="mx-auto grid max-w-7xl gap-8 px-4 md:grid-cols-3">
-          <div className="flex items-center gap-4">
-            <div className="flex size-12 shrink-0 items-center justify-center rounded-lg bg-primary/10">
-              <Truck className="size-6 text-primary" />
-            </div>
-            <div>
-              <h3 className="font-semibold">Darmowa dostawa</h3>
-              <p className="text-sm text-muted-foreground">
-                Przy zamówieniach powyżej 150 zł
-              </p>
-            </div>
-          </div>
-          <div className="flex items-center gap-4">
-            <div className="flex size-12 shrink-0 items-center justify-center rounded-lg bg-primary/10">
-              <Shield className="size-6 text-primary" />
-            </div>
-            <div>
-              <h3 className="font-semibold">Bezpieczne płatności</h3>
-              <p className="text-sm text-muted-foreground">
-                Płatność przez PayU
-              </p>
-            </div>
-          </div>
-          <div className="flex items-center gap-4">
-            <div className="flex size-12 shrink-0 items-center justify-center rounded-lg bg-primary/10">
-              <PawPrint className="size-6 text-primary" />
-            </div>
-            <div>
-              <h3 className="font-semibold">Najwyższa jakość</h3>
-              <p className="text-sm text-muted-foreground">
-                Tylko sprawdzone marki
-              </p>
-            </div>
+      <section className="relative py-16">
+        <div className="mx-auto max-w-7xl px-4">
+          <div className="grid gap-6 md:grid-cols-3">
+            {[
+              {
+                icon: Truck,
+                title: "Darmowa dostawa",
+                desc: "Przy zamówieniach powyżej 150 zł",
+              },
+              {
+                icon: Shield,
+                title: "Bezpieczne płatności",
+                desc: "Płatność przez PayU",
+              },
+              {
+                icon: PawPrint,
+                title: "Najwyższa jakość",
+                desc: "Tylko sprawdzone marki",
+              },
+            ].map((item) => (
+              <Card
+                key={item.title}
+                className="border-border/60 bg-card/80 shadow-soft transition-smooth hover:shadow-card hover:border-primary/20"
+              >
+                <CardContent className="flex items-center gap-5 p-6">
+                  <div className="flex size-14 shrink-0 items-center justify-center rounded-xl bg-primary/10 shadow-sm">
+                    <item.icon className="size-7 text-primary" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold">{item.title}</h3>
+                    <p className="mt-0.5 text-sm text-muted-foreground">
+                      {item.desc}
+                    </p>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
           </div>
         </div>
       </section>
 
       {/* Categories */}
       {categories.length > 0 && (
-        <section className="py-16">
+        <section className="py-20">
           <div className="mx-auto max-w-7xl px-4">
-            <h2 className="mb-8 text-2xl font-bold">Kategorie</h2>
+            <h2 className="mb-10 text-3xl font-bold">Kategorie</h2>
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
               {categories.map((category) => (
                 <Link
                   key={category.id}
                   href={`/produkty?kategoria=${category.slug}`}
+                  className="group block"
                 >
-                  <Card className="transition-shadow hover:shadow-md">
+                  <Card className="border-border/60 shadow-soft transition-smooth group-hover:shadow-card group-hover:-translate-y-0.5 group-hover:border-primary/20">
                     <CardContent className="p-6">
-                      <h3 className="font-semibold">{category.name}</h3>
-                      <p className="text-sm text-muted-foreground">
+                      <h3 className="font-semibold group-hover:text-primary transition-colors">
+                        {category.name}
+                      </h3>
+                      <p className="mt-1 text-sm text-muted-foreground">
                         {category._count.products} produktów
                       </p>
                     </CardContent>
@@ -149,47 +163,25 @@ export default async function HomePage() {
 
       {/* Featured Products */}
       {featuredProducts.length > 0 && (
-        <section className="bg-muted/50 py-16">
-          <div className="mx-auto max-w-7xl px-4">
-            <div className="mb-8 flex items-center justify-between">
-              <h2 className="text-2xl font-bold">Najnowsze produkty</h2>
+        <section className="relative py-20">
+          <div className="absolute inset-0 bg-linear-to-b from-muted/30 to-transparent" />
+          <div className="relative mx-auto max-w-7xl px-4">
+            <div className="mb-10 flex items-center justify-between">
+              <h2 className="text-3xl font-bold">Najnowsze produkty</h2>
               <Link href="/produkty">
-                <Button variant="outline" className="gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="gap-2 shadow-sm transition-all hover:shadow-md"
+                >
                   Zobacz wszystkie
                   <ArrowRight className="size-4" />
                 </Button>
               </Link>
             </div>
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
               {featuredProducts.map((product) => (
-                <Link key={product.id} href={`/produkty/${product.slug}`}>
-                  <Card className="overflow-hidden transition-shadow hover:shadow-md">
-                    <div className="aspect-square bg-muted">
-                      {product.imageUrl ? (
-                        <Image
-                          src={product.imageUrl}
-                          alt={product.name}
-                          width={400}
-                          height={400}
-                          className="size-full object-cover"
-                        />
-                      ) : (
-                        <div className="flex size-full items-center justify-center">
-                          <PawPrint className="size-12 text-muted-foreground/30" />
-                        </div>
-                      )}
-                    </div>
-                    <CardContent className="p-4">
-                      <p className="text-xs text-muted-foreground">
-                        {product.category.name}
-                      </p>
-                      <h3 className="mt-1 font-semibold">{product.name}</h3>
-                      <p className="mt-2 text-lg font-bold text-primary">
-                        {formatPrice(product.price)}
-                      </p>
-                    </CardContent>
-                  </Card>
-                </Link>
+                <ProductCard key={product.id} product={product} />
               ))}
             </div>
           </div>
