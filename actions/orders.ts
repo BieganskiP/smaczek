@@ -134,7 +134,7 @@ export async function createOrder(
 
       const redirectUrl = await createPayUOrder({
         orderId: order.id,
-        description: `Zamówienie Smaczek #${order.id.slice(-8)}`,
+        description: `Zamówienie Smaczek Kłaczek #${order.id.slice(-8)}`,
         totalAmount: Math.round(total * 100),
         customerEmail: parsed.data.email,
         customerFirstName: parsed.data.firstName,

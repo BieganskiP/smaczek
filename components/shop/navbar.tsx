@@ -15,7 +15,7 @@ export function Navbar() {
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4">
         <Link href="/" className="flex items-center gap-2">
           <PawPrint className="size-7 text-primary" />
-          <span className="text-xl font-bold">Smaczek</span>
+          <span className="text-xl font-bold">Smaczek Kłaczek</span>
         </Link>
 
         <nav className="hidden items-center gap-6 md:flex">

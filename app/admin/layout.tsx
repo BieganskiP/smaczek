@@ -25,7 +25,7 @@ export default async function AdminLayout({
       <aside className="w-64 border-r bg-card">
         <div className="flex h-16 items-center border-b px-6">
           <Link href="/admin" className="text-xl font-bold text-primary">
-            Smaczek Admin
+            Smaczek Kłaczek Admin
           </Link>
         </div>
         <nav className="flex flex-col gap-1 p-4">

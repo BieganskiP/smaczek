@@ -9,7 +9,7 @@ export function Footer() {
           <div>
             <div className="mb-4 flex items-center gap-2">
               <PawPrint className="size-6 text-primary" />
-              <span className="text-lg font-bold">Smaczek</span>
+              <span className="text-lg font-bold">Smaczek Kłaczek</span>
             </div>
             <p className="text-sm text-muted-foreground">
               Najlepsza karma dla Twojego pupila. Szeroki wybór karmy dla psów,
@@ -48,7 +48,7 @@ export function Footer() {
           </div>
         </div>
         <div className="mt-8 border-t pt-8 text-center text-sm text-muted-foreground">
-          &copy; {new Date().getFullYear()} Smaczek. Wszystkie prawa
+          &copy; {new Date().getFullYear()} Smaczek Kłaczek. Wszystkie prawa
           zastrzeżone.
         </div>
       </div>

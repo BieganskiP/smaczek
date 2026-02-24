@@ -15,8 +15,8 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "Smaczek - Karma dla zwierząt",
-    template: "%s | Smaczek",
+    default: "Smaczek Kłaczek - Karma dla zwierząt",
+    template: "%s | Smaczek Kłaczek",
   },
   description:
     "Najlepsza karma dla Twojego pupila. Szeroki wybór karmy dla psów, kotów i innych zwierząt domowych.",
