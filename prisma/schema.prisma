@@ -63,6 +63,15 @@ model Product {
   @@index([slug])
 }
 
+model RefLink {
+  id        String   @id @default(cuid())
+  code      String   @unique
+  label     String?  // np. "Facebook Ads" - dla admina
+  createdAt DateTime @default(now())
+
+  @@index([code])
+}
+
 model Order {
   id          String      @id @default(cuid())
   userId      String?
