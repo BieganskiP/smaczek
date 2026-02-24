@@ -159,6 +159,55 @@ export default function RegisterPage() {
                 </p>
               )}
             </div>
+            <div className="space-y-4 border-t border-border pt-4">
+              <label className="flex items-start gap-3 text-sm">
+                <input
+                  type="checkbox"
+                  name="acceptRegulamin"
+                  required
+                  className="mt-1 size-4 rounded border-border"
+                />
+                <span>
+                  Akceptuję{" "}
+                  <Link
+                    href="/regulamin"
+                    target="_blank"
+                    className="text-primary underline hover:no-underline"
+                  >
+                    regulamin sklepu
+                  </Link>
+                </span>
+              </label>
+              {state.fieldErrors?.acceptRegulamin && (
+                <p className="text-sm text-destructive">
+                  {state.fieldErrors.acceptRegulamin}
+                </p>
+              )}
+              <label className="flex items-start gap-3 text-sm">
+                <input
+                  type="checkbox"
+                  name="acceptPrivacy"
+                  required
+                  className="mt-1 size-4 rounded border-border"
+                />
+                <span>
+                  Wyrażam zgodę na przetwarzanie moich danych osobowych zgodnie z{" "}
+                  <Link
+                    href="/polityka-prywatnosci"
+                    target="_blank"
+                    className="text-primary underline hover:no-underline"
+                  >
+                    polityką prywatności
+                  </Link>{" "}
+                  (RODO)
+                </span>
+              </label>
+              {state.fieldErrors?.acceptPrivacy && (
+                <p className="text-sm text-destructive">
+                  {state.fieldErrors.acceptPrivacy}
+                </p>
+              )}
+            </div>
           </CardContent>
           <CardFooter className="flex flex-col gap-4">
             <Button type="submit" className="w-full" disabled={isPending}>

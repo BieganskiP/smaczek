@@ -16,6 +16,12 @@ const registerSchema = z.object({
   address: z.string().min(3, "Adres jest wymagany"),
   city: z.string().min(2, "Miasto jest wymagane"),
   postalCode: z.string().regex(/^\d{2}-\d{3}$/, "Kod pocztowy: format XX-XXX"),
+  acceptRegulamin: z
+    .string()
+    .refine((v) => v === "on", "Akceptacja regulaminu jest wymagana"),
+  acceptPrivacy: z
+    .string()
+    .refine((v) => v === "on", "Zgoda na przetwarzanie danych jest wymagana"),
 });
 
 export type AuthState = {
@@ -37,6 +43,8 @@ export async function register(
     address: formData.get("address"),
     city: formData.get("city"),
     postalCode: formData.get("postalCode"),
+    acceptRegulamin: formData.get("acceptRegulamin"),
+    acceptPrivacy: formData.get("acceptPrivacy"),
   });
 
   if (!parsed.success) {

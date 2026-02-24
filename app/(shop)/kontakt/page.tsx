@@ -1,5 +1,6 @@
 import { Mail, MapPin, Phone, MessageCircle } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
+import { COMPANY } from "@/lib/company";
 
 export const metadata = {
   title: "Kontakt",
@@ -30,10 +31,10 @@ export default function ContactPage() {
             <div>
               <h3 className="font-semibold">E-mail</h3>
               <a
-                href="mailto:kontakt@smaczek-klaczek.pl"
+                href={`mailto:${COMPANY.email}`}
                 className="mt-2 block text-primary hover:underline"
               >
-                kontakt@smaczek-klaczek.pl
+                {COMPANY.email}
               </a>
               <p className="mt-1 text-sm text-muted-foreground">
                 Odpowiadamy w ciągu 24 godzin
@@ -50,13 +51,13 @@ export default function ContactPage() {
             <div>
               <h3 className="font-semibold">Telefon</h3>
               <a
-                href="tel:+48123456789"
+                href={`tel:${COMPANY.phone.replace(/\s/g, "")}`}
                 className="mt-2 block text-primary hover:underline"
               >
-                +48 123 456 789
+                {COMPANY.phone}
               </a>
               <p className="mt-1 text-sm text-muted-foreground">
-                Pn–Pt 9:00–17:00
+                {COMPANY.workingHours}
               </p>
             </div>
           </CardContent>
@@ -71,11 +72,11 @@ export default function ContactPage() {
           <div>
             <h3 className="font-semibold">Adres</h3>
             <p className="mt-2 text-muted-foreground">
-              Smaczek Kłaczek Sp. z o.o.
+              {COMPANY.name}
               <br />
-              ul. Zwierzacza 15
+              {COMPANY.address.street}
               <br />
-              00-001 Warszawa
+              {COMPANY.address.postalCode} {COMPANY.address.city}
             </p>
           </div>
         </CardContent>

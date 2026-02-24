@@ -23,6 +23,9 @@ const orderSchema = z.object({
     .string()
     .regex(/^\d{2}-\d{3}$/, "Format: XX-XXX"),
   items: z.array(orderItemSchema).min(1, "Koszyk jest pusty"),
+  acceptRegulamin: z
+    .string()
+    .refine((v) => v === "on", "Akceptacja regulaminu jest wymagana"),
 });
 
 export type OrderState = {
@@ -54,6 +57,7 @@ export async function createOrder(
     city: formData.get("city"),
     postalCode: formData.get("postalCode"),
     items,
+    acceptRegulamin: formData.get("acceptRegulamin"),
   });
 
   if (!parsed.success) {

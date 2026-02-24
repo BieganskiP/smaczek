@@ -5,6 +5,7 @@ import { useEffect } from "react";
 
 const REF_COOKIE = "smaczek_ref";
 const REF_COOKIE_DAYS = 30;
+const CONSENT_KEY = "smaczek_cookie_consent";
 
 function setRefCookie(value: string) {
   const maxAge = REF_COOKIE_DAYS * 24 * 60 * 60;
@@ -16,7 +17,8 @@ export function RefLinkTracker() {
 
   useEffect(() => {
     const ref = searchParams.get("ref");
-    if (ref && ref.length <= 100) {
+    const hasConsent = localStorage.getItem(CONSENT_KEY) === "accepted";
+    if (ref && ref.length <= 100 && hasConsent) {
       setRefCookie(ref.trim());
     }
   }, [searchParams]);

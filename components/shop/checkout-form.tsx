@@ -174,6 +174,42 @@ export function CheckoutForm({ userProfile }: { userProfile: UserProfile }) {
             </CardContent>
           </Card>
 
+          <div className="mb-6">
+            <label className="flex items-start gap-3 text-sm">
+              <input
+                type="checkbox"
+                name="acceptRegulamin"
+                required
+                className="mt-1 size-4 rounded border-border"
+              />
+              <span>
+                Akceptuję{" "}
+                <Link
+                  href="/regulamin"
+                  target="_blank"
+                  className="text-primary underline hover:no-underline"
+                >
+                  regulamin sklepu
+                </Link>{" "}
+                oraz wyrażam zgodę na przetwarzanie danych w celu realizacji
+                zamówienia (zgodnie z{" "}
+                <Link
+                  href="/polityka-prywatnosci"
+                  target="_blank"
+                  className="text-primary underline hover:no-underline"
+                >
+                  polityką prywatności
+                </Link>
+                )
+              </span>
+            </label>
+            {state.fieldErrors?.acceptRegulamin && (
+              <p className="mt-1 text-sm text-destructive">
+                {state.fieldErrors.acceptRegulamin}
+              </p>
+            )}
+          </div>
+
           <Button
             type="submit"
             size="lg"

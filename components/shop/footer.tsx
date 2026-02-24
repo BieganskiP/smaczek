@@ -1,5 +1,6 @@
 import { PawPrint } from "lucide-react";
 import Link from "next/link";
+import { COMPANY } from "@/lib/company";
 
 export function Footer() {
   return (
@@ -13,13 +14,21 @@ export function Footer() {
                 <PawPrint className="size-5 text-primary" />
               </div>
               <span className="text-lg font-bold tracking-tight">
-                Smaczek Kłaczek
+                {COMPANY.shortName}
               </span>
             </div>
             <p className="text-sm leading-relaxed text-muted-foreground">
               Najlepsza karma dla Twojego pupila. Szeroki wybór karmy dla psów,
               kotów i innych zwierząt domowych.
             </p>
+            <div className="mt-4 text-xs text-muted-foreground">
+              <p>{COMPANY.name}</p>
+              <p>
+                {COMPANY.address.street}, {COMPANY.address.postalCode}{" "}
+                {COMPANY.address.city}
+              </p>
+              <p>NIP: {COMPANY.nip}</p>
+            </div>
           </div>
           <div>
             <h3 className="mb-4 font-semibold">Sklep</h3>
@@ -71,6 +80,30 @@ export function Footer() {
               </li>
               <li>
                 <Link
+                  href="/regulamin"
+                  className="transition-colors hover:text-foreground"
+                >
+                  Regulamin
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/polityka-prywatnosci"
+                  className="transition-colors hover:text-foreground"
+                >
+                  Polityka prywatności
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/polityka-cookies"
+                  className="transition-colors hover:text-foreground"
+                >
+                  Polityka cookies
+                </Link>
+              </li>
+              <li>
+                <Link
                   href="/login"
                   className="transition-colors hover:text-foreground"
                 >
@@ -89,7 +122,7 @@ export function Footer() {
           </div>
         </div>
         <div className="mt-12 border-t border-border/60 pt-8 text-center text-sm text-muted-foreground">
-          &copy; {new Date().getFullYear()} Smaczek Kłaczek. Wszystkie prawa
+          &copy; {new Date().getFullYear()} {COMPANY.shortName}. Wszystkie prawa
           zastrzeżone.
         </div>
       </div>
