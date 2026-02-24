@@ -30,7 +30,7 @@ export default async function AdminLayout({
         </div>
         <nav className="flex flex-col gap-1 p-4">
           <NavLink href="/admin" icon={<LayoutDashboard className="size-4" />}>
-            Dashboard
+            Panel główny
           </NavLink>
           <NavLink
             href="/admin/analityka"

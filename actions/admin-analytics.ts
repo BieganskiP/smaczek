@@ -195,3 +195,99 @@ export async function getAnalyticsData(
     refLinksSummary,
   };
 }
+
+export type DashboardData = {
+  productCount: number;
+  categoryCount: number;
+  orderCount: number;
+  userCount: number;
+  monthlyStats: { month: string; revenue: number; orders: number }[];
+  statusSummary: { status: string; count: number; revenue: number }[];
+};
+
+export async function getDashboardData(): Promise<DashboardData> {
+  await requireAdmin();
+
+  const [productCount, categoryCount, orderCount, userCount] =
+    await Promise.all([
+      prisma.product.count(),
+      prisma.category.count(),
+      prisma.order.count(),
+      prisma.user.count(),
+    ]);
+
+  const now = new Date();
+  const currentYear = now.getFullYear();
+  const currentMonth = now.getMonth() + 1;
+  const sixMonthsAgo = new Date(currentYear, currentMonth - 6, 1);
+
+  const orders = await prisma.order.findMany({
+    where: { createdAt: { gte: sixMonthsAgo } },
+    select: {
+      createdAt: true,
+      status: true,
+      total: true,
+    },
+  });
+
+  const monthlyMap = new Map<
+    string,
+    { revenue: number; orders: number; paidRevenue: number }
+  >();
+
+  for (let i = 5; i >= 0; i--) {
+    const d = new Date(currentYear, currentMonth - 1 - i, 1);
+    const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
+    monthlyMap.set(key, { revenue: 0, orders: 0, paidRevenue: 0 });
+  }
+
+  for (const order of orders) {
+    const key = `${order.createdAt.getFullYear()}-${String(order.createdAt.getMonth() + 1).padStart(2, "0")}`;
+    const entry = monthlyMap.get(key);
+    if (entry) {
+      entry.orders += 1;
+      if (order.status === "PAID") {
+        entry.revenue += order.total;
+        entry.paidRevenue += order.total;
+      }
+    }
+  }
+
+  const monthNames = [
+    "Sty", "Lut", "Mar", "Kwi", "Maj", "Cze",
+    "Lip", "Sie", "Wrz", "Paź", "Lis", "Gru",
+  ];
+
+  const monthlyStats = Array.from(monthlyMap.entries())
+    .sort(([a], [b]) => a.localeCompare(b))
+    .map(([key, val]) => {
+      const [y, m] = key.split("-").map(Number);
+      return {
+        month: `${monthNames[m - 1]} ${y}`,
+        revenue: val.revenue,
+        orders: val.orders,
+      };
+    });
+
+  const statusAgg = await prisma.order.groupBy({
+    by: ["status"],
+    _sum: { total: true },
+    _count: { id: true },
+    where: { createdAt: { gte: sixMonthsAgo } },
+  });
+
+  const statusSummary = statusAgg.map((s) => ({
+    status: s.status,
+    count: s._count.id,
+    revenue: s.status === "PAID" ? (s._sum.total ?? 0) : 0,
+  }));
+
+  return {
+    productCount,
+    categoryCount,
+    orderCount,
+    userCount,
+    monthlyStats,
+    statusSummary,
+  };
+}
