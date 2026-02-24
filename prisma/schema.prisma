@@ -70,6 +70,7 @@ model Order {
   status      OrderStatus @default(PENDING)
   total       Float
   payuOrderId String?
+  refLink     String?     // np. ?ref=promo_xyz - źródło marketingowe
   email       String
   phone       String
   firstName   String
@@ -83,6 +84,7 @@ model Order {
 
   @@index([userId])
   @@index([payuOrderId])
+  @@index([refLink])
 }
 
 model OrderItem {

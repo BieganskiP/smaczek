@@ -6,7 +6,7 @@ import {
   Package,
   FolderTree,
   ShoppingCart,
-  LogOut,
+  BarChart3,
 } from "lucide-react";
 import { AdminSignOut } from "@/components/admin/sign-out-button";
 
@@ -31,6 +31,12 @@ export default async function AdminLayout({
         <nav className="flex flex-col gap-1 p-4">
           <NavLink href="/admin" icon={<LayoutDashboard className="size-4" />}>
             Dashboard
+          </NavLink>
+          <NavLink
+            href="/admin/analityka"
+            icon={<BarChart3 className="size-4" />}
+          >
+            Analityka
           </NavLink>
           <NavLink
             href="/admin/produkty"

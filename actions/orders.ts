@@ -5,7 +5,7 @@ import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { createPayUOrder } from "@/lib/payu";
-import { headers } from "next/headers";
+import { headers, cookies } from "next/headers";
 
 const orderItemSchema = z.object({
   productId: z.string(),
@@ -91,6 +91,11 @@ export async function createOrder(
     return sum + product.price * item.quantity;
   }, 0);
 
+  const cookieStore = await cookies();
+  const refLink = cookieStore.get("smaczek_ref")?.value?.trim();
+  const refLinkSanitized =
+    refLink && refLink.length <= 100 ? refLink : undefined;
+
   const order = await prisma.order.create({
     data: {
       userId: session?.user?.id ?? null,
@@ -102,6 +107,7 @@ export async function createOrder(
       city: parsed.data.city,
       postalCode: parsed.data.postalCode,
       total,
+      refLink: refLinkSanitized,
       items: {
         create: parsed.data.items.map((item) => ({
           productId: item.productId,

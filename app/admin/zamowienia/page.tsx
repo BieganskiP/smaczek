@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import { RefLinksFilter } from "@/components/admin/ref-links-filter";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -24,11 +25,14 @@ const statusVariants: Record<
 export default async function AdminOrdersPage({
   searchParams,
 }: {
-  searchParams: Promise<{ status?: string }>;
+  searchParams: Promise<{ status?: string; ref?: string }>;
 }) {
-  const { status } = await searchParams;
+  const { status, ref: refLink } = await searchParams;
 
-  const where = status ? { status: status as "PENDING" | "PAID" | "CANCELLED" } : {};
+  const where: { status?: "PENDING" | "PAID" | "CANCELLED"; refLink?: string } =
+    {};
+  if (status) where.status = status as "PENDING" | "PAID" | "CANCELLED";
+  if (refLink) where.refLink = refLink;
 
   const orders = await prisma.order.findMany({
     where,
@@ -47,12 +51,19 @@ export default async function AdminOrdersPage({
 
       <div className="mb-6 flex flex-wrap gap-2">
         <Link href="/admin/zamowienia">
-          <Button variant={!status ? "default" : "outline"} size="sm">
+          <Button variant={!status && !refLink ? "default" : "outline"} size="sm">
             Wszystkie
           </Button>
         </Link>
         {statuses.map((s) => (
-          <Link key={s} href={`/admin/zamowienia?status=${s}`}>
+          <Link
+            key={s}
+            href={
+              refLink
+                ? `/admin/zamowienia?status=${s}&ref=${encodeURIComponent(refLink)}`
+                : `/admin/zamowienia?status=${s}`
+            }
+          >
             <Button
               variant={status === s ? "default" : "outline"}
               size="sm"
@@ -62,6 +73,9 @@ export default async function AdminOrdersPage({
           </Link>
         ))}
       </div>
+
+      <RefLinksFilter currentRef={refLink} statusParam={status} />
+
 
       {orders.length === 0 ? (
         <Card>
@@ -89,6 +103,12 @@ export default async function AdminOrdersPage({
                   <p className="text-xs text-muted-foreground">
                     {new Date(order.createdAt).toLocaleString("pl-PL")} ·{" "}
                     {order._count.items} pozycji
+                    {order.refLink && (
+                      <>
+                        {" · "}
+                        <span className="text-primary">ref: {order.refLink}</span>
+                      </>
+                    )}
                   </p>
                 </div>
                 <div className="flex items-center gap-4">

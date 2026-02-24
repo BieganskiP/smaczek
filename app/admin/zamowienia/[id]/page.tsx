@@ -126,6 +126,12 @@ export default async function AdminOrderDetailPage({
                 <span className="text-muted-foreground">Data złożenia:</span>{" "}
                 {new Date(order.createdAt).toLocaleString("pl-PL")}
               </p>
+              {order.refLink && (
+                <p>
+                  <span className="text-muted-foreground">Ref link:</span>{" "}
+                  <Badge variant="secondary">{order.refLink}</Badge>
+                </p>
+              )}
             </CardContent>
           </Card>
 
