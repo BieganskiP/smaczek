@@ -1,4 +1,4 @@
-import { PawPrint } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { COMPANY } from "@/lib/company";
 
@@ -9,14 +9,15 @@ export function Footer() {
       <div className="relative mx-auto max-w-7xl px-4 py-14">
         <div className="grid gap-10 md:grid-cols-3">
           <div>
-            <div className="mb-5 flex items-center gap-2.5">
-              <div className="flex size-10 items-center justify-center rounded-xl bg-primary/10 shadow-sm">
-                <PawPrint className="size-5 text-primary" />
-              </div>
-              <span className="text-lg font-bold tracking-tight">
-                {COMPANY.shortName}
-              </span>
-            </div>
+            <Link href="/" className="mb-5 inline-block">
+              <Image
+                src="/logo.png"
+                alt={COMPANY.shortName}
+                width={220}
+                height={55}
+                className="h-50 w-auto object-contain"
+              />
+            </Link>
             <p className="text-sm leading-relaxed text-muted-foreground">
               Najlepsza karma dla Twojego pupila. Szeroki wybór karmy dla psów,
               kotów i innych zwierząt domowych.

@@ -3,10 +3,21 @@ import { PrismaClient } from "../app/generated/prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
 import bcrypt from "bcryptjs";
 
-const connectionString = process.env.DATABASE_URL;
+let connectionString = process.env.DATABASE_URL;
 if (!connectionString) {
   console.error("Błąd: Ustaw DATABASE_URL w pliku .env");
   process.exit(1);
+}
+// Jawny sslmode=verify-full usuwa ostrzeżenie pg-connection-string
+try {
+  const url = new URL(connectionString);
+  const ssl = url.searchParams.get("sslmode");
+  if (ssl === "require" || ssl === "prefer" || ssl === "verify-ca") {
+    url.searchParams.set("sslmode", "verify-full");
+    connectionString = url.toString();
+  }
+} catch {
+  /* zostaw connectionString bez zmian */
 }
 
 const adapter = new PrismaPg({ connectionString });

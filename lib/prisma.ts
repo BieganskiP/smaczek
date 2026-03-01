@@ -6,7 +6,18 @@ const globalForPrisma = globalThis as unknown as {
 };
 
 function createPrismaClient() {
-  const connectionString = process.env.DATABASE_URL!;
+  let connectionString = process.env.DATABASE_URL!;
+  // Zapobiega ostrzeżeniu pg-connection-string: używaj jawnie sslmode=verify-full
+  try {
+    const url = new URL(connectionString);
+    const ssl = url.searchParams.get("sslmode");
+    if (ssl === "require" || ssl === "prefer" || ssl === "verify-ca") {
+      url.searchParams.set("sslmode", "verify-full");
+      connectionString = url.toString();
+    }
+  } catch {
+    // nie zmieniaj connectionString przy błędzie parsowania
+  }
   const adapter = new PrismaPg({ connectionString });
   return new PrismaClient({ adapter });
 }
