@@ -28,7 +28,8 @@ async function getHomePageData() {
         include: { _count: { select: { products: true } } },
       }),
     ]);
-    return { featuredProducts, categories, dbError: null };
+    const categoriesWithProducts = categories.filter((c) => c._count.products > 0);
+    return { featuredProducts, categories: categoriesWithProducts, dbError: null };
   } catch (error) {
     console.error("Database error on homepage:", error);
     return {

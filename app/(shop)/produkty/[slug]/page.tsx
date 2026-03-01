@@ -6,6 +6,7 @@ import { formatPrice } from "@/lib/utils";
 import { PawPrint } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { AddToCartButton } from "@/components/shop/add-to-cart-button";
+import { ProductDescription } from "@/components/shop/product-description";
 
 export default async function ProductPage({
   params,
@@ -97,14 +98,20 @@ export default async function ProductPage({
               }}
             />
           )}
-
-          <div className="mt-10 rounded-xl border border-border/60 bg-muted/30 p-6">
-            <h2 className="mb-3 text-lg font-semibold">Opis produktu</h2>
-            <p className="whitespace-pre-line leading-relaxed text-muted-foreground">
-              {product.description}
-            </p>
-          </div>
         </div>
+      </div>
+
+      {/* Opis i specyfikacja — pełna szerokość, czytelna typografia */}
+      <div className="mt-14 border-t border-border/60 pt-12">
+        <ProductDescription
+          shortDescription={product.shortDescription}
+          description={product.description}
+          attributes={
+            product.attributes && typeof product.attributes === "object" && !Array.isArray(product.attributes)
+              ? (product.attributes as Record<string, string>)
+              : null
+          }
+        />
       </div>
     </div>
   );

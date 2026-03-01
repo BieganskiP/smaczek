@@ -18,9 +18,9 @@ type ProductCardProps = {
 
 export function ProductCard({ product }: ProductCardProps) {
   return (
-    <Link href={`/produkty/${product.slug}`} className="group block animate-fade-up">
-      <Card className="hover-lift-strong overflow-hidden border-border/60 bg-card shadow-card">
-        <div className="relative aspect-square overflow-hidden bg-muted/50 shimmer-on-hover">
+    <Link href={`/produkty/${product.slug}`} className="group block h-full animate-fade-up">
+      <Card className="hover-lift-strong flex h-full flex-col overflow-hidden border-border/60 bg-card shadow-card">
+        <div className="relative aspect-square shrink-0 overflow-hidden bg-muted/50 shimmer-on-hover">
           {product.imageUrl ? (
             <Image
               src={product.imageUrl}
@@ -35,17 +35,17 @@ export function ProductCard({ product }: ProductCardProps) {
             </div>
           )}
         </div>
-        <CardContent className="p-5">
+        <CardContent className="flex flex-1 flex-col p-5">
           <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
             {product.category.name}
           </p>
-          <h3 className="mt-1.5 font-semibold leading-tight group-hover:text-primary transition-colors">
+          <h3 className="mt-1.5 line-clamp-2 font-semibold leading-tight transition-colors group-hover:text-primary">
             {product.name}
           </h3>
-          <p className="mt-1 line-clamp-2 text-sm text-muted-foreground">
+          <p className="mt-1 line-clamp-2 flex-1 text-sm text-muted-foreground">
             {product.description}
           </p>
-          <p className="mt-3 text-lg font-bold text-primary transition-transform duration-300 group-hover:scale-[1.02]">
+          <p className="mt-auto pt-3 text-lg font-bold text-primary transition-transform duration-300 group-hover:scale-[1.02]">
             {formatPrice(product.price)}
           </p>
         </CardContent>

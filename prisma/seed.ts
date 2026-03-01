@@ -1,7 +1,65 @@
 import "dotenv/config";
+import { readFileSync } from "fs";
+import { join } from "path";
 import { PrismaClient } from "../app/generated/prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
 import bcrypt from "bcryptjs";
+
+// --- Types for data/*.json ---
+type RawProduct = {
+  url?: string;
+  name: string;
+  short_description?: string;
+  description?: string;
+  price?: string;
+  images?: string[];
+  categories?: string[];
+  attributes?: Record<string, string>;
+};
+
+// --- Helpers for data seed ---
+function slugify(name: string): string {
+  return name
+    .toLowerCase()
+    .trim()
+    .replace(/\s+/g, "-")
+    .replace(/[ą]/g, "a")
+    .replace(/[ć]/g, "c")
+    .replace(/[ę]/g, "e")
+    .replace(/[ł]/g, "l")
+    .replace(/[ń]/g, "n")
+    .replace(/[ó]/g, "o")
+    .replace(/[ś]/g, "s")
+    .replace(/[źż]/g, "z")
+    .replace(/[^a-z0-9-]/g, "");
+}
+
+function slugFromUrl(url: string): string | null {
+  if (!url || typeof url !== "string") return null;
+  try {
+    const path = new URL(url).pathname;
+    const match = path.match(/\/produkt\/([^/]+)\/?$/);
+    return match ? match[1].replace(/\/$/, "") : null;
+  } catch {
+    return null;
+  }
+}
+
+function parsePrice(priceStr: string): number {
+  if (!priceStr || typeof priceStr !== "string") return 0;
+  const normalized = priceStr.replace(/,/g, ".").replace(/[^\d.]/g, "").trim();
+  const value = parseFloat(normalized);
+  return Number.isNaN(value) ? 0 : value;
+}
+
+const DATA_CATEGORY_TO_SLUG: Record<string, string> = {
+  "karmy dla kotka": "karma-dla-kotow",
+  "karmy dla pieska": "karma-dla-psow",
+};
+
+function slugForCategoryName(name: string): string {
+  return DATA_CATEGORY_TO_SLUG[name] ?? slugify(name);
+}
 
 let connectionString = process.env.DATABASE_URL;
 if (!connectionString) {
@@ -64,151 +122,106 @@ async function main() {
   });
   console.log(`Test user: ${user.email}`);
 
-  // Create categories
-  const categories = await Promise.all([
-    prisma.category.upsert({
-      where: { slug: "karma-dla-psow" },
-      update: {},
-      create: {
-        name: "Karma dla psów",
-        slug: "karma-dla-psow",
-        description: "Wysokiej jakości karma dla psów wszystkich ras i rozmiarów",
-      },
-    }),
-    prisma.category.upsert({
-      where: { slug: "karma-dla-kotow" },
-      update: {},
-      create: {
-        name: "Karma dla kotów",
-        slug: "karma-dla-kotow",
-        description: "Pełnowartościowa karma dla kotów domowych",
-      },
-    }),
-    prisma.category.upsert({
-      where: { slug: "przysmaki" },
-      update: {},
-      create: {
-        name: "Przysmaki",
-        slug: "przysmaki",
-        description: "Smaczne przysmaki i nagrody dla zwierząt",
-      },
-    }),
-    prisma.category.upsert({
-      where: { slug: "akcesoria" },
-      update: {},
-      create: {
-        name: "Akcesoria",
-        slug: "akcesoria",
-        description: "Miski, zabawki i inne akcesoria dla zwierząt",
-      },
-    }),
-  ]);
+  // --- Seed only from data/produkty.json and data/produkty-kotka.json ---
+  const dataDir = join(process.cwd(), "data");
+  const dataFiles = ["produkty.json", "produkty-kotka.json"];
+  const allRaw: RawProduct[] = [];
 
-  console.log(`Created ${categories.length} categories`);
-
-  // Create products
-  const products = [
-    {
-      name: "Royal Canin Medium Adult",
-      slug: "royal-canin-medium-adult",
-      description:
-        "Karma sucha dla dorosłych psów średnich ras (11-25 kg). Zbilansowana formuła z wysoką zawartością białka wspierająca masę mięśniową. Wzbogacona o kwasy EPA i DHA dla zdrowej skóry i lśniącej sierści. Opakowanie 15 kg.",
-      price: 249.99,
-      stock: 50,
-      categoryId: categories[0].id,
-    },
-    {
-      name: "Purina Pro Plan Adult Chicken",
-      slug: "purina-pro-plan-adult-chicken",
-      description:
-        "Karma sucha dla dorosłych psów z kurczakiem. Formuła OPTIDIGEST dla zdrowego trawienia. Bogata w białko zwierzęce dla silnych mięśni. Opakowanie 12 kg.",
-      price: 189.99,
-      stock: 35,
-      categoryId: categories[0].id,
-    },
-    {
-      name: "Hill's Science Plan Adult Large",
-      slug: "hills-science-plan-adult-large",
-      description:
-        "Karma sucha dla dorosłych psów dużych ras. Klinicznie potwierdzona formuła z antyoksydantami dla wsparcia odporności. Zdrowe stawy i sprawny ruch. Opakowanie 14 kg.",
-      price: 279.99,
-      stock: 25,
-      categoryId: categories[0].id,
-    },
-    {
-      name: "Whiskas Adult z Kurczakiem",
-      slug: "whiskas-adult-z-kurczakiem",
-      description:
-        "Karma sucha dla dorosłych kotów z kurczakiem. Pełnowartościowa, zbilansowana karma codzienna. Wspiera zdrowie układu moczowego. Opakowanie 7 kg.",
-      price: 89.99,
-      stock: 60,
-      categoryId: categories[1].id,
-    },
-    {
-      name: "Royal Canin Indoor 27",
-      slug: "royal-canin-indoor-27",
-      description:
-        "Karma sucha dla kotów domowych żyjących wewnątrz. Redukuje zapach odchodów. Kontrola masy ciała. Wspiera trawienie. Opakowanie 10 kg.",
-      price: 199.99,
-      stock: 40,
-      categoryId: categories[1].id,
-    },
-    {
-      name: "Felix Fantastic z Wołowiną",
-      slug: "felix-fantastic-z-wolowina",
-      description:
-        "Karma mokra dla dorosłych kotów z wołowiną w galaretce. Soczyste kawałki mięsa w pysznej galaretce. Pakiet 12 x 85g.",
-      price: 29.99,
-      stock: 100,
-      categoryId: categories[1].id,
-    },
-    {
-      name: "Pedigree Dentastix Medium",
-      slug: "pedigree-dentastix-medium",
-      description:
-        "Przysmaki dentystyczne dla psów średnich ras (10-25 kg). Klinicznie potwierdzone oczyszczanie zębów. Codzienne wsparcie higieny jamy ustnej. Opakowanie 28 sztuk.",
-      price: 39.99,
-      stock: 80,
-      categoryId: categories[2].id,
-    },
-    {
-      name: "Dreamies z Łososiem",
-      slug: "dreamies-z-lososiem",
-      description:
-        "Przysmaki dla kotów o smaku łososia. Chrupiące na zewnątrz, kremowe w środku. Idealne jako nagroda. Opakowanie 180 g.",
-      price: 14.99,
-      stock: 150,
-      categoryId: categories[2].id,
-    },
-    {
-      name: "Miska ceramiczna dla kota",
-      slug: "miska-ceramiczna-dla-kota",
-      description:
-        "Elegancka miska ceramiczna z motywem łapek. Pojemność 300 ml. Antypoślizgowa podstawa. Można myć w zmywarce. Idealna na karmę mokrą.",
-      price: 34.99,
-      stock: 45,
-      categoryId: categories[3].id,
-    },
-    {
-      name: "Kong Classic Large",
-      slug: "kong-classic-large",
-      description:
-        "Kultowa zabawka dla psów dużych ras. Wykonana z naturalnej gumy. Można wypełnić smakołykami. Odporna na gryzienie. Stymuluje mentalnie.",
-      price: 59.99,
-      stock: 30,
-      categoryId: categories[3].id,
-    },
-  ];
-
-  for (const product of products) {
-    await prisma.product.upsert({
-      where: { slug: product.slug },
-      update: {},
-      create: product,
-    });
+  for (const file of dataFiles) {
+    const filePath = join(dataDir, file);
+    try {
+      const content = readFileSync(filePath, "utf-8");
+      const parsed = JSON.parse(content) as RawProduct[];
+      if (Array.isArray(parsed)) allRaw.push(...parsed);
+    } catch (err) {
+      console.warn(`Could not load ${file}:`, err instanceof Error ? err.message : err);
+    }
   }
 
-  console.log(`Created ${products.length} products`);
+  if (allRaw.length === 0) {
+    console.log("No data products to seed (data files missing or empty).");
+  } else {
+    const uniqueCategoryNames = new Set<string>();
+    for (const p of allRaw) {
+      if (p.categories?.length) {
+        p.categories.forEach((c) => uniqueCategoryNames.add(c));
+      }
+    }
+
+    const defaultCategorySlug = "inne";
+    await prisma.category.upsert({
+      where: { slug: defaultCategorySlug },
+      update: {},
+      create: {
+        name: "Inne",
+        slug: defaultCategorySlug,
+        description: "Inne produkty",
+      },
+    });
+
+    const categorySlugs = new Set<string>([defaultCategorySlug]);
+    for (const name of uniqueCategoryNames) {
+      const slug = slugForCategoryName(name);
+      categorySlugs.add(slug);
+      await prisma.category.upsert({
+        where: { slug },
+        update: {},
+        create: {
+          name,
+          slug,
+          description: null,
+        },
+      });
+    }
+    console.log(`Upserted ${categorySlugs.size} categories from data`);
+
+    let seeded = 0;
+    let skipped = 0;
+    for (const raw of allRaw) {
+      const slug = slugFromUrl(raw.url ?? "") ?? slugify(raw.name);
+      const categoryName = raw.categories?.[0];
+      const slugForCat = categoryName ? slugForCategoryName(categoryName) : defaultCategorySlug;
+      const category = await prisma.category.findUnique({ where: { slug: slugForCat } });
+      if (!category) {
+        skipped++;
+        continue;
+      }
+      const price = parsePrice(raw.price ?? "");
+      const imageUrl = raw.images?.[0] ?? null;
+      const description = raw.description ?? raw.short_description ?? "";
+      if (!description.trim()) {
+        skipped++;
+        continue;
+      }
+
+      await prisma.product.upsert({
+        where: { slug },
+        update: {
+          name: raw.name,
+          description,
+          shortDescription: raw.short_description ?? null,
+          price,
+          imageUrl,
+          categoryId: category.id,
+          attributes: raw.attributes ?? undefined,
+        },
+        create: {
+          name: raw.name,
+          slug,
+          description,
+          shortDescription: raw.short_description ?? null,
+          price,
+          imageUrl,
+          stock: 0,
+          categoryId: category.id,
+          attributes: raw.attributes ?? undefined,
+        },
+      });
+      seeded++;
+    }
+    console.log(`Seeded ${seeded} products from data (${skipped} skipped).`);
+  }
+
   console.log("Seeding complete!");
   console.log("\nLogin credentials:");
   console.log("  Admin: admin@smaczek.pl / admin123");
