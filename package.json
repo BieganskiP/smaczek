@@ -17,6 +17,8 @@
     "@auth/prisma-adapter": "^2.11.1",
     "@prisma/adapter-pg": "^7.4.1",
     "@prisma/client": "^7.4.1",
+    "@react-email/components": "^1.0.11",
+    "@react-email/render": "^2.0.5",
     "@vercel/blob": "^2.3.0",
     "bcryptjs": "^3.0.3",
     "class-variance-authority": "^0.7.1",
@@ -28,6 +30,7 @@
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "recharts": "^3.7.0",
+    "resend": "^6.10.0",
     "slugify": "^1.6.6",
     "tailwind-merge": "^3.5.0",
     "zod": "^4.3.6"

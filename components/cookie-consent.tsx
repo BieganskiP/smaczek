@@ -20,6 +20,11 @@ export function CookieConsent() {
     setShow(false);
   };
 
+  const acceptEssential = () => {
+    localStorage.setItem(CONSENT_KEY, "essential");
+    setShow(false);
+  };
+
   if (!show) return null;
 
   return (
@@ -30,9 +35,9 @@ export function CookieConsent() {
     >
       <div className="mx-auto flex max-w-4xl flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <p className="text-sm text-muted-foreground">
-          Używamy plików cookies, aby sklep działał prawidłowo oraz w celach
-          marketingowych (ref linki). Klikając &quot;Akceptuję&quot;, wyrażasz
-          zgodę na ich używanie.{" "}
+          Używamy plików cookies niezbędnych do działania sklepu oraz, za Twoją
+          zgodą, marketingowych (śledzenie polecenia). Niezbędne cookies są
+          zawsze aktywne.{" "}
           <Link
             href="/polityka-cookies"
             className="text-primary underline hover:no-underline"
@@ -41,8 +46,11 @@ export function CookieConsent() {
           </Link>
         </p>
         <div className="flex shrink-0 gap-2">
+          <Button onClick={acceptEssential} size="sm" variant="outline">
+            Tylko niezbędne
+          </Button>
           <Button onClick={accept} size="sm">
-            Akceptuję
+            Akceptuję wszystkie
           </Button>
         </div>
       </div>

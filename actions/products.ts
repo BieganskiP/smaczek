@@ -162,6 +162,27 @@ export async function updateProduct(
   redirect("/admin/produkty");
 }
 
+export async function updateStock(
+  id: string,
+  stock: number,
+): Promise<ProductState> {
+  await requireAdmin();
+
+  if (!Number.isInteger(stock) || stock < 0) {
+    return { error: "Nieprawidłowy stan magazynowy" };
+  }
+
+  const product = await prisma.product.findUnique({ where: { id } });
+  if (!product) return { error: "Produkt nie został znaleziony" };
+
+  await prisma.product.update({ where: { id }, data: { stock } });
+
+  revalidatePath("/admin/produkty");
+  revalidatePath("/produkty");
+  revalidatePath(`/produkty/${product.slug}`);
+  return { success: true };
+}
+
 export async function deleteProduct(id: string): Promise<ProductState> {
   await requireAdmin();
 

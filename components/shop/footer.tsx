@@ -2,27 +2,46 @@ import Image from "next/image";
 import Link from "next/link";
 import { COMPANY } from "@/lib/company";
 
+const SHOP_LINKS = [
+  { href: "/produkty", label: "Produkty" },
+  { href: "/koszyk", label: "Koszyk" },
+  { href: "/dostawa", label: "Dostawa i płatności" },
+] as const;
+
+const COMPANY_LINKS = [
+  { href: "/o-nas", label: "O nas" },
+  { href: "/kontakt", label: "Kontakt" },
+  { href: "/regulamin", label: "Regulamin" },
+  { href: "/polityka-prywatnosci", label: "Polityka prywatności" },
+  { href: "/polityka-cookies", label: "Polityka cookies" },
+  { href: "/login", label: "Logowanie" },
+  { href: "/rejestracja", label: "Rejestracja" },
+] as const;
+
 export function Footer() {
   return (
-    <footer className="relative mt-auto border-t border-border/60 bg-linear-to-b from-card to-card/80 shadow-[0_-4px_20px_-8px_rgba(0,0,0,0.06)]">
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_100%,hsl(var(--primary)/0.12),transparent)] opacity-0 dark:opacity-100" />
-      <div className="relative mx-auto max-w-7xl px-4 py-14">
-        <div className="grid gap-10 md:grid-cols-3">
+    <footer className="relative border-t border-white/[0.06] bg-black">
+      {/* Top gold line */}
+      <div className="h-px w-full bg-gradient-to-r from-transparent via-primary/40 to-transparent" />
+
+      <div className="mx-auto max-w-7xl px-6 py-16">
+        <div className="grid gap-12 md:grid-cols-3">
+          {/* Brand column */}
           <div>
-            <Link href="/" className="mb-5 inline-block">
+            <Link href="/" className="mb-6 inline-block transition-opacity duration-200 hover:opacity-75">
               <Image
                 src="/logo.png"
                 alt={COMPANY.shortName}
                 width={220}
                 height={55}
-                className="h-50 w-auto object-contain"
+                className="h-11 w-auto object-contain"
               />
             </Link>
-            <p className="text-sm leading-relaxed text-muted-foreground">
+            <p className="max-w-xs text-sm leading-relaxed text-white/40">
               Najlepsza karma dla Twojego pupila. Szeroki wybór karmy dla psów,
               kotów i innych zwierząt domowych.
             </p>
-            <div className="mt-4 text-xs text-muted-foreground">
+            <div className="mt-5 space-y-1 text-xs text-white/25">
               <p>{COMPANY.name}</p>
               <p>
                 {COMPANY.address.street}, {COMPANY.address.postalCode}{" "}
@@ -31,100 +50,54 @@ export function Footer() {
               <p>NIP: {COMPANY.nip}</p>
             </div>
           </div>
+
+          {/* Sklep */}
           <div>
-            <h3 className="mb-4 font-semibold">Sklep</h3>
-            <ul className="space-y-3 text-sm text-muted-foreground">
-              <li>
-                <Link
-                  href="/produkty"
-                  className="transition-colors hover:text-foreground"
-                >
-                  Produkty
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/koszyk"
-                  className="transition-colors hover:text-foreground"
-                >
-                  Koszyk
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/dostawa"
-                  className="transition-colors hover:text-foreground"
-                >
-                  Dostawa i płatności
-                </Link>
-              </li>
+            <h3 className="section-title-line mb-5 text-xs font-semibold uppercase tracking-[0.15em] text-white/60">
+              Sklep
+            </h3>
+            <ul className="space-y-3">
+              {SHOP_LINKS.map(({ href, label }) => (
+                <li key={href}>
+                  <Link
+                    href={href}
+                    className="text-sm text-white/35 transition-colors duration-200 hover:text-primary"
+                  >
+                    {label}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
+
+          {/* Firma */}
           <div>
-            <h3 className="mb-4 font-semibold">Firma</h3>
-            <ul className="space-y-3 text-sm text-muted-foreground">
-              <li>
-                <Link
-                  href="/o-nas"
-                  className="transition-colors hover:text-foreground"
-                >
-                  O nas
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/kontakt"
-                  className="transition-colors hover:text-foreground"
-                >
-                  Kontakt
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/regulamin"
-                  className="transition-colors hover:text-foreground"
-                >
-                  Regulamin
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/polityka-prywatnosci"
-                  className="transition-colors hover:text-foreground"
-                >
-                  Polityka prywatności
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/polityka-cookies"
-                  className="transition-colors hover:text-foreground"
-                >
-                  Polityka cookies
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/login"
-                  className="transition-colors hover:text-foreground"
-                >
-                  Logowanie
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/rejestracja"
-                  className="transition-colors hover:text-foreground"
-                >
-                  Rejestracja
-                </Link>
-              </li>
+            <h3 className="section-title-line mb-5 text-xs font-semibold uppercase tracking-[0.15em] text-white/60">
+              Firma
+            </h3>
+            <ul className="space-y-3">
+              {COMPANY_LINKS.map(({ href, label }) => (
+                <li key={href}>
+                  <Link
+                    href={href}
+                    className="text-sm text-white/35 transition-colors duration-200 hover:text-primary"
+                  >
+                    {label}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
         </div>
-        <div className="mt-12 border-t border-border/60 pt-8 text-center text-sm text-muted-foreground">
-          &copy; {new Date().getFullYear()} {COMPANY.shortName}. Wszystkie prawa
-          zastrzeżone.
+
+        {/* Bottom bar */}
+        <div className="mt-14 flex flex-col items-center justify-between gap-3 border-t border-white/[0.06] pt-8 sm:flex-row">
+          <p className="text-xs text-white/25">
+            &copy; {new Date().getFullYear()} {COMPANY.shortName}. Wszystkie prawa zastrzeżone.
+          </p>
+          <p className="text-xs text-white/15">
+            Made with care in Poland
+          </p>
         </div>
       </div>
     </footer>

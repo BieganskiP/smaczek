@@ -18,9 +18,11 @@ export function SessionRefresher() {
   useEffect(() => {
     if (searchParams.get("session_refresh") === "1" && !hasRefreshed.current) {
       hasRefreshed.current = true;
-      update().then(() => {
-        router.replace("/", { scroll: false });
-      });
+      update()
+        .then(() => {
+          router.replace("/", { scroll: false });
+        })
+        .catch((err) => console.error("Session refresh failed:", err));
     }
   }, [searchParams, update, router]);
 

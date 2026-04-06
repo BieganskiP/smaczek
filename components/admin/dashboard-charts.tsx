@@ -12,13 +12,28 @@ import {
   Pie,
   Cell,
   Legend,
+  AreaChart,
+  Area,
 } from "recharts";
 
-const COLORS = ["hsl(var(--primary))", "#22c55e", "#ef4444"];
+const STATUS_COLORS: Record<string, string> = {
+  PAID: "#22c55e",
+  PENDING: "#f59e0b",
+  CANCELLED: "#ef4444",
+};
 const STATUS_LABELS: Record<string, string> = {
   PAID: "Opłacone",
   PENDING: "Oczekujące",
   CANCELLED: "Anulowane",
+};
+
+const TOOLTIP_STYLE = {
+  backgroundColor: "hsl(0 0% 8%)",
+  border: "1px solid hsl(0 0% 18%)",
+  borderRadius: "8px",
+  fontSize: "12px",
+  color: "hsl(40 12% 96%)",
+  boxShadow: "0 4px 12px rgba(0,0,0,0.4)",
 };
 
 type MonthlyStats = { month: string; revenue: number; orders: number };
@@ -28,42 +43,54 @@ export function RevenueChart({ data }: { data: MonthlyStats[] }) {
   return (
     <div className="h-64 w-full">
       <ResponsiveContainer width="100%" height="100%">
-        <BarChart data={data} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
-          <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
+        <AreaChart data={data} margin={{ top: 10, right: 4, left: 0, bottom: 0 }}>
+          <defs>
+            <linearGradient id="revenueGradient" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="5%" stopColor="hsl(36 72% 70%)" stopOpacity={0.3} />
+              <stop offset="95%" stopColor="hsl(36 72% 70%)" stopOpacity={0} />
+            </linearGradient>
+          </defs>
+          <CartesianGrid
+            strokeDasharray="3 3"
+            stroke="hsl(0 0% 14%)"
+            vertical={false}
+          />
           <XAxis
             dataKey="month"
-            tick={{ fontSize: 12 }}
-            className="text-muted-foreground"
+            tick={{ fontSize: 11, fill: "hsl(0 0% 55%)" }}
+            axisLine={false}
+            tickLine={false}
           />
           <YAxis
-            tick={{ fontSize: 12 }}
+            tick={{ fontSize: 11, fill: "hsl(0 0% 55%)" }}
             tickFormatter={(v) => `${v} zł`}
-            className="text-muted-foreground"
+            axisLine={false}
+            tickLine={false}
+            width={60}
           />
           <Tooltip
-            contentStyle={{
-              backgroundColor: "hsl(var(--card))",
-              border: "1px solid hsl(var(--border))",
-              borderRadius: "8px",
-            }}
+            contentStyle={TOOLTIP_STYLE}
             formatter={(value, name) => [
               name === "revenue" && typeof value === "number"
                 ? new Intl.NumberFormat("pl-PL", {
                     style: "currency",
                     currency: "PLN",
                   }).format(value)
-                : value ?? 0,
-              name === "revenue" ? "Przychód" : "Zamówienia",
+                : (value ?? 0),
+              "Przychód",
             ]}
-            labelFormatter={(label) => label}
           />
-          <Bar
+          <Area
+            type="monotone"
             dataKey="revenue"
-            fill="hsl(var(--primary))"
-            radius={[4, 4, 0, 0]}
+            stroke="hsl(36 72% 70%)"
+            strokeWidth={2}
+            fill="url(#revenueGradient)"
+            dot={{ fill: "hsl(36 72% 70%)", r: 3, strokeWidth: 0 }}
+            activeDot={{ r: 5, strokeWidth: 0 }}
             name="revenue"
           />
-        </BarChart>
+        </AreaChart>
       </ResponsiveContainer>
     </div>
   );
@@ -73,26 +100,35 @@ export function OrdersChart({ data }: { data: MonthlyStats[] }) {
   return (
     <div className="h-64 w-full">
       <ResponsiveContainer width="100%" height="100%">
-        <BarChart data={data} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
-          <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
+        <BarChart data={data} margin={{ top: 10, right: 4, left: 0, bottom: 0 }}>
+          <CartesianGrid
+            strokeDasharray="3 3"
+            stroke="hsl(0 0% 14%)"
+            vertical={false}
+          />
           <XAxis
             dataKey="month"
-            tick={{ fontSize: 12 }}
-            className="text-muted-foreground"
+            tick={{ fontSize: 11, fill: "hsl(0 0% 55%)" }}
+            axisLine={false}
+            tickLine={false}
           />
-          <YAxis tick={{ fontSize: 12 }} className="text-muted-foreground" />
+          <YAxis
+            tick={{ fontSize: 11, fill: "hsl(0 0% 55%)" }}
+            axisLine={false}
+            tickLine={false}
+            allowDecimals={false}
+          />
           <Tooltip
-            contentStyle={{
-              backgroundColor: "hsl(var(--card))",
-              border: "1px solid hsl(var(--border))",
-              borderRadius: "8px",
-            }}
+            contentStyle={TOOLTIP_STYLE}
+            formatter={(value) => [value ?? 0, "Zamówienia"]}
+            cursor={{ fill: "hsl(0 0% 14%)", radius: 4 }}
           />
           <Bar
             dataKey="orders"
             fill="#22c55e"
             radius={[4, 4, 0, 0]}
             name="Zamówienia"
+            opacity={0.85}
           />
         </BarChart>
       </ResponsiveContainer>
@@ -109,39 +145,46 @@ export function StatusPieChart({ data }: { data: StatusSummary[] }) {
 
   if (chartData.every((d) => d.value === 0)) {
     return (
-      <div className="flex h-48 items-center justify-center text-muted-foreground">
-        Brak zamówień
+      <div className="flex h-48 items-center justify-center text-sm text-muted-foreground">
+        Brak danych o zamówieniach
       </div>
     );
   }
 
   return (
-    <div className="h-48 w-full">
+    <div className="h-52 w-full">
       <ResponsiveContainer width="100%" height="100%">
         <PieChart>
           <Pie
             data={chartData}
             cx="50%"
-            cy="50%"
-            innerRadius={40}
-            outerRadius={70}
-            paddingAngle={2}
+            cy="45%"
+            innerRadius={44}
+            outerRadius={72}
+            paddingAngle={3}
             dataKey="value"
-            label={({ name, value }) => `${name}: ${value}`}
           >
-            {chartData.map((_, index) => (
-              <Cell key={index} fill={COLORS[index % COLORS.length]} />
+            {chartData.map((entry, index) => (
+              <Cell
+                key={index}
+                fill={STATUS_COLORS[entry.status] ?? "hsl(0 0% 40%)"}
+                strokeWidth={0}
+              />
             ))}
           </Pie>
           <Tooltip
-            contentStyle={{
-              backgroundColor: "hsl(var(--card))",
-              border: "1px solid hsl(var(--border))",
-              borderRadius: "8px",
-            }}
+            contentStyle={TOOLTIP_STYLE}
             formatter={(value) => [value ?? 0, "Zamówień"]}
           />
-          <Legend />
+          <Legend
+            iconType="circle"
+            iconSize={8}
+            formatter={(value) => (
+              <span style={{ fontSize: "12px", color: "hsl(0 0% 65%)" }}>
+                {value}
+              </span>
+            )}
+          />
         </PieChart>
       </ResponsiveContainer>
     </div>

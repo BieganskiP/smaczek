@@ -1,6 +1,12 @@
+import type { Metadata } from "next";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
+
+export const metadata: Metadata = {
+  title: "Moje zamówienia",
+  robots: { index: false, follow: false },
+};
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { formatPrice } from "@/lib/utils";

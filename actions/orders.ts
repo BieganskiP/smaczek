@@ -6,6 +6,8 @@ import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { createPayUOrder } from "@/lib/payu";
 import { headers, cookies } from "next/headers";
+import { sendEmail } from "@/lib/email";
+import { OrderPlacedEmail } from "@/emails/order-placed";
 
 const orderItemSchema = z.object({
   productId: z.string(),
@@ -128,6 +130,31 @@ export async function createOrder(
       data: { stock: { decrement: item.quantity } },
     });
   }
+
+  // Send order confirmation email
+  await sendEmail({
+    to: parsed.data.email,
+    subject: `Zamówienie #${order.id.slice(-8).toUpperCase()} zostało złożone`,
+    react: OrderPlacedEmail({
+      order: {
+        id: order.id,
+        firstName: parsed.data.firstName,
+        lastName: parsed.data.lastName,
+        email: parsed.data.email,
+        phone: parsed.data.phone,
+        address: parsed.data.address,
+        city: parsed.data.city,
+        postalCode: parsed.data.postalCode,
+        total,
+        createdAt: order.createdAt,
+        items: parsed.data.items.map((item) => ({
+          productName: productMap.get(item.productId)!.name,
+          quantity: item.quantity,
+          price: productMap.get(item.productId)!.price,
+        })),
+      },
+    }),
+  });
 
   // Try PayU payment if configured
   const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";

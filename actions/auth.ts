@@ -12,7 +12,7 @@ const registerSchema = z.object({
   lastName: z.string().min(2, "Nazwisko musi mieć co najmniej 2 znaki"),
   email: z.string().email("Nieprawidłowy adres email"),
   phone: z.string().min(9, "Nieprawidłowy numer telefonu"),
-  password: z.string().min(6, "Hasło musi mieć co najmniej 6 znaków"),
+  password: z.string().min(8, "Hasło musi mieć co najmniej 8 znaków"),
   address: z.string().min(3, "Adres jest wymagany"),
   city: z.string().min(2, "Miasto jest wymagane"),
   postalCode: z.string().regex(/^\d{2}-\d{3}$/, "Kod pocztowy: format XX-XXX"),

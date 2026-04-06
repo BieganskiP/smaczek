@@ -5,8 +5,8 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
-import { Pencil, Trash2 } from "lucide-react";
-import { deleteProduct } from "@/actions/products";
+import { Pencil, Trash2, Check, X, Package } from "lucide-react";
+import { deleteProduct, updateStock } from "@/actions/products";
 import { formatPrice } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -42,6 +42,82 @@ export function ProductList({
       {products.map((product) => (
         <ProductRow key={product.id} product={product} />
       ))}
+    </div>
+  );
+}
+
+function StockEditor({
+  productId,
+  initialStock,
+}: {
+  productId: string;
+  initialStock: number;
+}) {
+  const router = useRouter();
+  const [editing, setEditing] = useState(false);
+  const [value, setValue] = useState(String(initialStock));
+  const [saving, setSaving] = useState(false);
+
+  async function handleSave() {
+    const parsed = parseInt(value, 10);
+    if (isNaN(parsed) || parsed < 0) return;
+    setSaving(true);
+    await updateStock(productId, parsed);
+    setSaving(false);
+    setEditing(false);
+    router.refresh();
+  }
+
+  function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
+    if (e.key === "Enter") handleSave();
+    if (e.key === "Escape") { setValue(String(initialStock)); setEditing(false); }
+  }
+
+  if (!editing) {
+    return (
+      <button
+        onClick={() => setEditing(true)}
+        className="flex cursor-pointer items-center gap-1.5 rounded-md border border-transparent px-2 py-1 text-sm text-muted-foreground transition-colors hover:border-border hover:text-foreground"
+        title="Kliknij aby edytować stan magazynowy"
+      >
+        <Package className="size-3.5 shrink-0" />
+        <span className="font-medium tabular-nums">{initialStock}</span>
+        <span className="text-xs opacity-60">szt.</span>
+      </button>
+    );
+  }
+
+  return (
+    <div className="flex items-center gap-1">
+      <input
+        type="number"
+        min={0}
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+        onKeyDown={handleKeyDown}
+        autoFocus
+        className="w-20 rounded-md border border-border bg-background px-2 py-1 text-sm tabular-nums focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+        aria-label="Stan magazynowy"
+      />
+      <Button
+        size="icon"
+        variant="ghost"
+        className="size-7 text-green-500 hover:text-green-400"
+        onClick={handleSave}
+        disabled={saving}
+        aria-label="Zapisz"
+      >
+        <Check className="size-4" />
+      </Button>
+      <Button
+        size="icon"
+        variant="ghost"
+        className="size-7 text-muted-foreground hover:text-foreground"
+        onClick={() => { setValue(String(initialStock)); setEditing(false); }}
+        aria-label="Anuluj"
+      >
+        <X className="size-4" />
+      </Button>
     </div>
   );
 }
@@ -82,10 +158,10 @@ function ProductRow({ product }: { product: ProductWithCategory }) {
             <h3 className="font-medium">{product.name}</h3>
             {!product.active && <Badge variant="secondary">Ukryty</Badge>}
           </div>
-          <p className="text-sm text-muted-foreground">
-            {product.category.name} · Magazyn: {product.stock}
-          </p>
+          <p className="text-sm text-muted-foreground">{product.category.name}</p>
         </div>
+
+        <StockEditor productId={product.id} initialStock={product.stock} />
 
         <div className="text-right">
           <div className="font-semibold">{formatPrice(product.price)}</div>

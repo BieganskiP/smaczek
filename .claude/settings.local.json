@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx uipro:*)",
+      "Bash(python3 .claude/skills/ui-ux-pro-max/scripts/search.py \"pet food ecommerce shop premium dark elegant\" --design-system -p \"Smaczek Kłaczek\")",
+      "Bash(python .claude/skills/ui-ux-pro-max/scripts/search.py \"pet food ecommerce shop premium dark elegant\" --design-system -p \"Smaczek Kłaczek\")",
+      "Bash(python3:*)",
+      "Bash(python skills/ui-ux-pro-max/scripts/search.py \"premium food shop ecommerce luxury dark elegant\" --design-system -p \"Smaczek Kłaczek\")",
+      "Bash(python .claude/skills/ui-ux-pro-max/scripts/search.py \"premium food shop ecommerce luxury dark elegant\" --design-system -p \"Smaczek Kłaczek\")",
+      "Bash(xargs grep:*)",
+      "Bash(find:*)"
+    ]
+  }
+}
