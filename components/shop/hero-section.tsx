@@ -22,7 +22,10 @@ export function HeroSection() {
           >
             <source src={videoUrl} type="video/mp4" />
           </video>
-          <div className="absolute inset-0 bg-gradient-to-r from-black/95 via-black/75 to-black/40" aria-hidden />
+          <div
+            className="absolute inset-0 bg-gradient-to-r from-black/95 via-black/75 to-black/40"
+            aria-hidden
+          />
         </>
       ) : (
         <>
@@ -31,14 +34,20 @@ export function HeroSection() {
             style={{ backgroundImage: "url(/hero.png)" }}
             aria-hidden
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-black/95 via-black/80 to-black/50" aria-hidden />
+          <div
+            className="absolute inset-0 bg-gradient-to-r from-black/95 via-black/80 to-black/50"
+            aria-hidden
+          />
         </>
       )}
 
       {/* Decorative gold glow */}
       <div
         className="pointer-events-none absolute -left-32 top-1/3 h-96 w-96 rounded-full opacity-20 blur-3xl"
-        style={{ background: "radial-gradient(circle, hsl(36 72% 70%) 0%, transparent 70%)" }}
+        style={{
+          background:
+            "radial-gradient(circle, hsl(36 72% 70%) 0%, transparent 70%)",
+        }}
         aria-hidden
       />
 
@@ -60,7 +69,9 @@ export function HeroSection() {
             style={{ animationDelay: "80ms" }}
           >
             <span className="block text-white">Lepsza karma.</span>
-            <span className="mt-2 block text-gold-gradient">Zdrowszy pupil.</span>
+            <span className="mt-2 block text-gold-gradient">
+              Zdrowszy pupil.
+            </span>
           </h1>
 
           {/* Subtitle */}
@@ -82,7 +93,10 @@ export function HeroSection() {
               className="group inline-flex cursor-pointer items-center gap-2.5 rounded-full bg-primary px-7 py-3.5 text-sm font-semibold text-black transition-all duration-300 hover:bg-primary/90 hover:shadow-[0_0_24px_hsl(36_72%_70%/0.4)]"
             >
               Zobacz ofertę
-              <ArrowRight className="size-4 transition-transform duration-200 group-hover:translate-x-0.5" aria-hidden />
+              <ArrowRight
+                className="size-4 transition-transform duration-200 group-hover:translate-x-0.5"
+                aria-hidden
+              />
             </Link>
             <Link
               href="/dostawa"
@@ -98,9 +112,9 @@ export function HeroSection() {
             style={{ animationDelay: "320ms" }}
           >
             {[
-              { value: "500+", label: "produktów" },
+              { value: "100+", label: "produktów" },
               { value: "24h", label: "dostawa" },
-              { value: "4.9★", label: "ocena klientów" },
+              { value: "5.0★", label: "ocena klientów" },
             ].map(({ value, label }) => (
               <div key={label} className="flex flex-col">
                 <span className="text-xl font-bold text-primary">{value}</span>
