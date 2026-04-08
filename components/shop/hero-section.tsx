@@ -23,7 +23,7 @@ export function HeroSection() {
             <source src={videoUrl} type="video/mp4" />
           </video>
           <div
-            className="absolute inset-0 bg-gradient-to-r from-black/95 via-black/75 to-black/40"
+            className="absolute inset-0 bg-linear-to-r from-black/95 via-black/75 to-black/40"
             aria-hidden
           />
         </>
@@ -35,7 +35,7 @@ export function HeroSection() {
             aria-hidden
           />
           <div
-            className="absolute inset-0 bg-gradient-to-r from-black/95 via-black/80 to-black/50"
+            className="absolute inset-0 bg-linear-to-r from-black/95 via-black/80 to-black/50"
             aria-hidden
           />
         </>
@@ -56,7 +56,7 @@ export function HeroSection() {
         <div className="max-w-2xl">
           {/* Label */}
           <div
-            className="animate-fade-up mb-7 inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/[0.08] px-4 py-1.5 text-xs font-medium uppercase tracking-[0.12em] text-primary"
+            className="animate-fade-up mb-7 inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/8 px-4 py-1.5 text-xs font-medium uppercase tracking-[0.12em] text-primary"
             style={{ animationDelay: "0ms" }}
           >
             <Sparkles className="size-3" aria-hidden />
@@ -127,7 +127,7 @@ export function HeroSection() {
 
       {/* Bottom fade */}
       <div
-        className="pointer-events-none absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-black to-transparent"
+        className="pointer-events-none absolute bottom-0 left-0 right-0 h-32 bg-linear-to-t from-black to-transparent"
         aria-hidden
       />
     </section>
