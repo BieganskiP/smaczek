@@ -63,7 +63,7 @@ export default async function ProductsPage({
       </h1>
 
       <div className="mb-6">
-        <SearchForm defaultValue={szukaj ?? ""} categorySlug={kategoria} />
+        <SearchForm defaultValue={szukaj ?? ""} />
       </div>
 
       {/* Category filters — only categories that have products */}

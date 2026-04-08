@@ -16,13 +16,23 @@ export async function generateMetadata({
     return { title: "Produkt nie znaleziony" };
   }
 
+  const description = (product.shortDescription ?? product.description).slice(0, 160);
+
   return {
     title: product.name,
-    description: product.description.slice(0, 160),
+    description,
+    alternates: { canonical: `/produkty/${product.slug}` },
     openGraph: {
       title: `${product.name} | Smaczek Kłaczek`,
-      description: product.description.slice(0, 160),
-      ...(product.imageUrl ? { images: [{ url: product.imageUrl }] } : {}),
+      description,
+      type: "website",
+      ...(product.imageUrl ? { images: [{ url: product.imageUrl, alt: product.name }] } : {}),
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${product.name} | Smaczek Kłaczek`,
+      description,
+      ...(product.imageUrl ? { images: [product.imageUrl] } : {}),
     },
   };
 }

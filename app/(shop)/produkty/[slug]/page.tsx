@@ -22,9 +22,35 @@ export default async function ProductPage({
 
   if (!product) notFound();
 
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+  const productSchema = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: product.name,
+    description: product.shortDescription ?? product.description,
+    url: `${baseUrl}/produkty/${product.slug}`,
+    ...(product.imageUrl ? { image: product.imageUrl } : {}),
+    offers: {
+      "@type": "Offer",
+      price: (product.price / 100).toFixed(2),
+      priceCurrency: "PLN",
+      availability:
+        product.stock > 0
+          ? "https://schema.org/InStock"
+          : "https://schema.org/OutOfStock",
+      url: `${baseUrl}/produkty/${product.slug}`,
+    },
+    category: product.category.name,
+  };
+
   return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }}
+      />
     <div className="mx-auto max-w-7xl px-4 py-10">
-      <nav className="mb-8 text-sm text-muted-foreground">
+      <nav className="mb-8 text-sm text-muted-foreground" aria-label="Nawigacja okruszkowa">
         <Link
           href="/produkty"
           className="transition-colors hover:text-foreground"
@@ -56,7 +82,7 @@ export default async function ProductPage({
             />
           ) : (
             <div className="flex size-full items-center justify-center">
-              <PawPrint className="size-24 text-muted-foreground/30" />
+              <PawPrint className="size-24 text-muted-foreground/30" aria-hidden />
             </div>
           )}
         </div>
@@ -114,5 +140,6 @@ export default async function ProductPage({
         />
       </div>
     </div>
+    </>
   );
 }

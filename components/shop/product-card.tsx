@@ -68,7 +68,7 @@ export function ProductCard({ product }: ProductCardProps) {
             <p className="text-base font-bold text-primary">
               {formatPrice(product.price)}
             </p>
-            <span className="text-[10px] font-medium uppercase tracking-wider text-white/30 transition-colors duration-200 group-hover:text-primary/60">
+            <span className="text-[10px] font-medium uppercase tracking-wider text-white/50 transition-colors duration-200 group-hover:text-primary/80">
               Sprawdź
             </span>
           </div>

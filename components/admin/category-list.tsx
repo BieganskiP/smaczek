@@ -71,9 +71,9 @@ function CategoryRow({ category }: { category: CategoryWithCount }) {
           {error && <p className="mt-1 text-sm text-destructive">{error}</p>}
         </div>
         <div className="flex gap-2">
-          <Link href={`/admin/kategorie/${category.id}`}>
-            <Button variant="outline" size="icon">
-              <Pencil className="size-4" />
+          <Link href={`/admin/kategorie/${category.id}`} aria-label={`Edytuj kategorię ${category.name}`}>
+            <Button variant="outline" size="icon" aria-label={`Edytuj kategorię ${category.name}`}>
+              <Pencil className="size-4" aria-hidden />
             </Button>
           </Link>
           <Button
@@ -81,8 +81,9 @@ function CategoryRow({ category }: { category: CategoryWithCount }) {
             size="icon"
             onClick={handleDelete}
             disabled={deleting}
+            aria-label={`Usuń kategorię ${category.name}`}
           >
-            <Trash2 className="size-4" />
+            <Trash2 className="size-4" aria-hidden />
           </Button>
         </div>
       </CardContent>

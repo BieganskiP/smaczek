@@ -130,6 +130,10 @@
   button:not(:disabled):hover {
     cursor: pointer;
   }
+  /* Pointer cursor on the native clear (×) button inside search inputs */
+  input[type="search"]::-webkit-search-cancel-button {
+    cursor: pointer;
+  }
 }
 
 @layer utilities {

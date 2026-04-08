@@ -32,9 +32,8 @@ export const metadata: Metadata = {
     description:
       "Najlepsza karma dla Twojego pupila. Szeroki wybór karmy dla psów, kotów i innych zwierząt domowych.",
   },
-  alternates: {
-    canonical: baseUrl,
-  },
+  // Per-page canonical is set in each page/layout; no global fallback to avoid
+  // incorrectly pointing every URL's canonical to the root.
 };
 
 export default function RootLayout({

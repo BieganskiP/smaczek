@@ -1,6 +1,28 @@
 import { prisma } from "@/lib/prisma";
+import type { Metadata } from "next";
+import { COMPANY } from "@/lib/company";
+import Image from "next/image";
+
+const CATEGORY_IMAGES: Record<string, string> = {
+  "karma-dla-kotow": "/karma-dla-kotow.webp",
+  "karma-dla-psow": "/karma-dla-psow.webp",
+  "akcesoria": "/akcesoria.webp",
+};
 
 export const dynamic = "force-dynamic";
+
+export const metadata: Metadata = {
+  title: "Smaczek Kłaczek – Karma dla psów i kotów",
+  description:
+    "Sklep z premium karmą dla psów, kotów i innych zwierząt domowych. Szeroki wybór, szybka dostawa i świeże produkty najwyższej jakości.",
+  alternates: { canonical: "/" },
+  openGraph: {
+    title: "Smaczek Kłaczek – Karma dla psów i kotów",
+    description:
+      "Sklep z premium karmą dla psów, kotów i innych zwierząt domowych. Szeroki wybór, szybka dostawa i świeże produkty.",
+  },
+};
+
 import Link from "next/link";
 import { AlertCircle, Truck, ShieldCheck, Leaf, ArrowUpRight } from "lucide-react";
 import { ProductCard } from "@/components/shop/product-card";
@@ -36,7 +58,38 @@ async function getHomePageData() {
 export default async function HomePage() {
   const { featuredProducts, categories, dbError } = await getHomePageData();
 
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+
+  const orgSchema = {
+    "@context": "https://schema.org",
+    "@type": "OnlineStore",
+    name: COMPANY.shortName,
+    legalName: COMPANY.name,
+    url: baseUrl,
+    logo: `${baseUrl}/logo.png`,
+    contactPoint: {
+      "@type": "ContactPoint",
+      telephone: COMPANY.phone,
+      email: COMPANY.email,
+      contactType: "customer service",
+      availableLanguage: "pl",
+      hoursAvailable: COMPANY.workingHours,
+    },
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: COMPANY.address.street,
+      postalCode: COMPANY.address.postalCode,
+      addressLocality: COMPANY.address.city,
+      addressCountry: "PL",
+    },
+  };
+
   return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(orgSchema) }}
+      />
     <div className="bg-black">
       {/* DB error banner */}
       {dbError && (
@@ -93,7 +146,7 @@ export default async function HomePage() {
               </div>
               <Link
                 href="/produkty"
-                className="group hidden cursor-pointer items-center gap-1.5 text-sm font-medium text-white/40 transition-colors duration-200 hover:text-primary sm:flex"
+                className="group hidden cursor-pointer items-center gap-1.5 text-sm font-medium text-white/55 transition-colors duration-200 hover:text-primary sm:flex"
               >
                 Zobacz wszystkie
                 <ArrowUpRight className="size-4 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" aria-hidden />
@@ -139,32 +192,70 @@ export default async function HomePage() {
               </h2>
             </div>
 
-            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-              {categories.map((category, index) => (
-                <Link
-                  key={category.id}
-                  href={`/produkty?kategoria=${category.slug}`}
-                  className="group animate-fade-up block cursor-pointer"
-                  style={{ animationDelay: `${index * 60 + 80}ms` }}
-                >
-                  <div className="card-glass hover-lift-strong shimmer-on-hover flex items-center justify-between rounded-xl p-5 transition-all duration-300">
-                    <div>
-                      <h3 className="font-semibold text-white/75 transition-colors duration-200 group-hover:text-white">
-                        {category.name}
-                      </h3>
-                      <p className="mt-0.5 text-xs text-white/30">
-                        {category._count.products}{" "}
-                        {category._count.products === 1
-                          ? "produkt"
-                          : category._count.products < 5
-                            ? "produkty"
-                            : "produktów"}
-                      </p>
+            <div className="flex flex-wrap justify-center gap-3">
+              {categories.map((category, index) => {
+                const image = CATEGORY_IMAGES[category.slug];
+                const count = category._count.products;
+                const countLabel =
+                  count === 1 ? "produkt" : count < 5 ? "produkty" : "produktów";
+
+                return image ? (
+                  /* ── Image card ── */
+                  <Link
+                    key={category.id}
+                    href={`/produkty?kategoria=${category.slug}`}
+                    className="group animate-fade-up block w-full cursor-pointer sm:w-[calc(50%-6px)] lg:w-[calc(25%-9px)]"
+                    style={{ animationDelay: `${index * 60 + 80}ms` }}
+                  >
+                    <div className="hover-lift-strong relative overflow-hidden rounded-xl aspect-[3/4]">
+                      <Image
+                        src={image}
+                        alt={category.name}
+                        fill
+                        className="object-cover object-[center_20%] transition-transform duration-700 group-hover:scale-105"
+                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                      />
+                      {/* Bottom gradient overlay */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" aria-hidden />
+                      {/* Gold border glow on hover */}
+                      <div className="absolute inset-0 rounded-xl ring-1 ring-white/10 transition-all duration-300 group-hover:ring-primary/50" aria-hidden />
+                      {/* Text */}
+                      <div className="absolute bottom-0 left-0 right-0 p-4">
+                        <h3 className="font-semibold text-white transition-colors duration-200 group-hover:text-primary">
+                          {category.name}
+                        </h3>
+                        <p className="mt-0.5 text-xs text-white/55">
+                          {count} {countLabel}
+                        </p>
+                      </div>
+                      {/* Arrow */}
+                      <div className="absolute right-3 top-3 flex size-7 items-center justify-center rounded-full bg-black/50 text-white/40 backdrop-blur-sm transition-all duration-300 group-hover:bg-primary/20 group-hover:text-primary">
+                        <ArrowUpRight className="size-3.5" aria-hidden />
+                      </div>
                     </div>
-                    <ArrowUpRight className="size-4 text-white/20 transition-all duration-200 group-hover:text-primary" aria-hidden />
-                  </div>
-                </Link>
-              ))}
+                  </Link>
+                ) : (
+                  /* ── Text-only card ── */
+                  <Link
+                    key={category.id}
+                    href={`/produkty?kategoria=${category.slug}`}
+                    className="group animate-fade-up block w-full cursor-pointer sm:w-[calc(50%-6px)] lg:w-[calc(25%-9px)]"
+                    style={{ animationDelay: `${index * 60 + 80}ms` }}
+                  >
+                    <div className="card-glass hover-lift-strong shimmer-on-hover flex items-center justify-between rounded-xl p-5 transition-all duration-300">
+                      <div>
+                        <h3 className="font-semibold text-white/75 transition-colors duration-200 group-hover:text-white">
+                          {category.name}
+                        </h3>
+                        <p className="mt-0.5 text-xs text-white/45">
+                          {count} {countLabel}
+                        </p>
+                      </div>
+                      <ArrowUpRight className="size-4 text-white/20 transition-all duration-200 group-hover:text-primary" aria-hidden />
+                    </div>
+                  </Link>
+                );
+              })}
             </div>
           </div>
         </section>
@@ -214,5 +305,6 @@ export default async function HomePage() {
         </div>
       </section>
     </div>
+    </>
   );
 }

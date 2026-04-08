@@ -86,6 +86,7 @@ export default function CartPage() {
                         parseInt(e.target.value) || 1,
                       )
                     }
+                    aria-label={`Ilość: ${item.name}`}
                     className="w-20"
                   />
                 </div>

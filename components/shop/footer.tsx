@@ -20,19 +20,22 @@ const COMPANY_LINKS = [
 
 export function Footer() {
   return (
-    <footer className="relative border-t border-white/[0.06] bg-black">
+    <footer className="relative border-t border-white/6 bg-black">
       {/* Top gold line */}
-      <div className="h-px w-full bg-gradient-to-r from-transparent via-primary/40 to-transparent" />
+      <div className="h-px w-full bg-linear-to-r from-transparent via-primary/40 to-transparent" />
 
       <div className="mx-auto max-w-7xl px-6 py-16">
         <div className="grid gap-12 md:grid-cols-3">
           {/* Brand column */}
           <div>
-            <Link href="/" className="mb-6 inline-block transition-opacity duration-200 hover:opacity-75">
+            <Link
+              href="/"
+              className="mb-6 inline-block transition-opacity duration-200 hover:opacity-75"
+            >
               <Image
-                src="/logo.png"
+                src="/logo-simple.png"
                 alt={COMPANY.shortName}
-                width={220}
+                width={110}
                 height={55}
                 className="h-11 w-auto object-contain"
               />
@@ -41,7 +44,7 @@ export function Footer() {
               Najlepsza karma dla Twojego pupila. Szeroki wybór karmy dla psów,
               kotów i innych zwierząt domowych.
             </p>
-            <div className="mt-5 space-y-1 text-xs text-white/25">
+            <div className="mt-5 space-y-1 text-xs text-white/40">
               <p>{COMPANY.name}</p>
               <p>
                 {COMPANY.address.street}, {COMPANY.address.postalCode}{" "}
@@ -61,7 +64,7 @@ export function Footer() {
                 <li key={href}>
                   <Link
                     href={href}
-                    className="text-sm text-white/35 transition-colors duration-200 hover:text-primary"
+                    className="text-sm text-white/55 transition-colors duration-200 hover:text-primary"
                   >
                     {label}
                   </Link>
@@ -80,7 +83,7 @@ export function Footer() {
                 <li key={href}>
                   <Link
                     href={href}
-                    className="text-sm text-white/35 transition-colors duration-200 hover:text-primary"
+                    className="text-sm text-white/55 transition-colors duration-200 hover:text-primary"
                   >
                     {label}
                   </Link>
@@ -91,13 +94,12 @@ export function Footer() {
         </div>
 
         {/* Bottom bar */}
-        <div className="mt-14 flex flex-col items-center justify-between gap-3 border-t border-white/[0.06] pt-8 sm:flex-row">
-          <p className="text-xs text-white/25">
-            &copy; {new Date().getFullYear()} {COMPANY.shortName}. Wszystkie prawa zastrzeżone.
+        <div className="mt-14 flex flex-col items-center justify-between gap-3 border-t border-white/6 pt-8 sm:flex-row">
+          <p className="text-xs text-white/40">
+            &copy; {new Date().getFullYear()} {COMPANY.shortName}. Wszystkie
+            prawa zastrzeżone.
           </p>
-          <p className="text-xs text-white/15">
-            Made with care in Poland
-          </p>
+          <p className="text-xs text-white/30">Made with care in Poland</p>
         </div>
       </div>
     </footer>

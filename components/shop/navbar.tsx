@@ -87,7 +87,8 @@ export function Navbar() {
               <ShoppingCart className="size-[18px]" />
               {totalItems > 0 && (
                 <span className="absolute -right-0.5 -top-0.5 flex size-4 items-center justify-center rounded-full bg-primary text-[10px] font-semibold text-black">
-                  {totalItems}
+                  <span aria-hidden>{totalItems}</span>
+                  <span className="sr-only">{totalItems} produktów w koszyku</span>
                 </span>
               )}
             </Link>
@@ -98,7 +99,7 @@ export function Navbar() {
                   <Link
                     href="/admin"
                     className="flex h-9 cursor-pointer items-center gap-1.5 rounded-full border border-white/10 px-3 text-xs font-medium text-white/60 transition-all duration-200 hover:border-primary/40 hover:text-white/90"
-                    title="Panel admina"
+                    aria-label="Panel admina"
                   >
                     <LayoutDashboard className="size-3.5" />
                     <span>Admin</span>
