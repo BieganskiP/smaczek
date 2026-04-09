@@ -46,7 +46,7 @@ export function HeroSection() {
         className="pointer-events-none absolute -left-32 top-1/3 h-96 w-96 rounded-full opacity-20 blur-3xl"
         style={{
           background:
-            "radial-gradient(circle, hsl(36 72% 70%) 0%, transparent 70%)",
+            "radial-gradient(circle, hsl(var(--primary)) 0%, transparent 70%)",
         }}
         aria-hidden
       />
@@ -90,7 +90,7 @@ export function HeroSection() {
           >
             <Link
               href="/produkty"
-              className="group inline-flex cursor-pointer items-center gap-2.5 rounded-full bg-primary px-7 py-3.5 text-sm font-semibold text-black transition-all duration-300 hover:bg-primary/90 hover:shadow-[0_0_24px_hsl(36_72%_70%/0.4)]"
+              className="group inline-flex cursor-pointer items-center gap-2.5 rounded-full bg-primary px-7 py-3.5 text-sm font-semibold text-primary-foreground transition-all duration-300 hover:bg-primary/90 hover:shadow-[0_0_24px_hsl(var(--primary)/0.4)]"
             >
               Zobacz ofertę
               <ArrowRight
@@ -127,7 +127,7 @@ export function HeroSection() {
 
       {/* Bottom fade */}
       <div
-        className="pointer-events-none absolute bottom-0 left-0 right-0 h-32 bg-linear-to-t from-black to-transparent"
+        className="pointer-events-none absolute bottom-0 left-0 right-0 h-32 bg-linear-to-t from-background to-transparent"
         aria-hidden
       />
     </section>

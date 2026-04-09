@@ -20,8 +20,8 @@ const COMPANY_LINKS = [
 
 export function Footer() {
   return (
-    <footer className="relative border-t border-white/6 bg-black">
-      {/* Top gold line */}
+    <footer className="relative border-t border-border bg-card">
+      {/* Top accent line */}
       <div className="h-px w-full bg-linear-to-r from-transparent via-primary/40 to-transparent" />
 
       <div className="mx-auto max-w-7xl px-6 py-16">
@@ -40,11 +40,11 @@ export function Footer() {
                 className="h-11 w-auto object-contain"
               />
             </Link>
-            <p className="max-w-xs text-sm leading-relaxed text-white/40">
+            <p className="max-w-xs text-sm leading-relaxed text-muted-foreground">
               Najlepsza karma dla Twojego pupila. Szeroki wybór karmy dla psów,
               kotów i innych zwierząt domowych.
             </p>
-            <div className="mt-5 space-y-1 text-xs text-white/40">
+            <div className="mt-5 space-y-1 text-xs text-muted-foreground">
               <p>{COMPANY.name}</p>
               <p>
                 {COMPANY.address.street}, {COMPANY.address.postalCode}{" "}
@@ -56,7 +56,7 @@ export function Footer() {
 
           {/* Sklep */}
           <div>
-            <h3 className="section-title-line mb-5 text-xs font-semibold uppercase tracking-[0.15em] text-white/60">
+            <h3 className="section-title-line mb-5 text-xs font-semibold uppercase tracking-[0.15em] text-foreground/60">
               Sklep
             </h3>
             <ul className="space-y-3">
@@ -64,7 +64,7 @@ export function Footer() {
                 <li key={href}>
                   <Link
                     href={href}
-                    className="text-sm text-white/55 transition-colors duration-200 hover:text-primary"
+                    className="text-sm text-muted-foreground transition-colors duration-200 hover:text-primary"
                   >
                     {label}
                   </Link>
@@ -75,7 +75,7 @@ export function Footer() {
 
           {/* Firma */}
           <div>
-            <h3 className="section-title-line mb-5 text-xs font-semibold uppercase tracking-[0.15em] text-white/60">
+            <h3 className="section-title-line mb-5 text-xs font-semibold uppercase tracking-[0.15em] text-foreground/60">
               Firma
             </h3>
             <ul className="space-y-3">
@@ -83,7 +83,7 @@ export function Footer() {
                 <li key={href}>
                   <Link
                     href={href}
-                    className="text-sm text-white/55 transition-colors duration-200 hover:text-primary"
+                    className="text-sm text-muted-foreground transition-colors duration-200 hover:text-primary"
                   >
                     {label}
                   </Link>
@@ -94,12 +94,12 @@ export function Footer() {
         </div>
 
         {/* Bottom bar */}
-        <div className="mt-14 flex flex-col items-center justify-between gap-3 border-t border-white/6 pt-8 sm:flex-row">
-          <p className="text-xs text-white/40">
+        <div className="mt-14 flex flex-col items-center justify-between gap-3 border-t border-border pt-8 sm:flex-row">
+          <p className="text-xs text-muted-foreground">
             &copy; {new Date().getFullYear()} {COMPANY.shortName}. Wszystkie
             prawa zastrzeżone.
           </p>
-          <p className="text-xs text-white/30">Made with care in Poland</p>
+          <p className="text-xs text-muted-foreground/70">Made with care in Poland</p>
         </div>
       </div>
     </footer>

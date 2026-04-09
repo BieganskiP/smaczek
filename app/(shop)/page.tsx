@@ -90,7 +90,7 @@ export default async function HomePage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(orgSchema) }}
       />
-    <div className="bg-black">
+    <div className="bg-background">
       {/* DB error banner */}
       {dbError && (
         <div className="mx-auto max-w-7xl px-6 py-4">
@@ -113,7 +113,7 @@ export default async function HomePage() {
       <HeroSection />
 
       {/* Trust bar */}
-      <section className="border-y border-white/[0.06] bg-white/[0.02] py-6">
+      <section className="border-y border-border bg-muted/40 py-6">
         <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-center gap-10 px-6">
           {[
             { icon: Truck, label: "Szybka dostawa" },
@@ -124,7 +124,7 @@ export default async function HomePage() {
               <span className="flex size-8 items-center justify-center rounded-full border border-primary/25 bg-primary/[0.08]">
                 <Icon className="size-3.5 text-primary" aria-hidden />
               </span>
-              <span className="text-sm font-medium text-white/45">{label}</span>
+              <span className="text-sm font-medium text-muted-foreground">{label}</span>
             </div>
           ))}
         </div>
@@ -140,13 +140,13 @@ export default async function HomePage() {
                 <p className="section-title-line animate-fade-up mb-2 text-xs font-semibold uppercase tracking-[0.15em] text-primary">
                   Oferta
                 </p>
-                <h2 className="animate-fade-up text-3xl font-bold text-white sm:text-4xl" style={{ animationDelay: "60ms" }}>
+                <h2 className="animate-fade-up text-3xl font-bold text-foreground sm:text-4xl" style={{ animationDelay: "60ms" }}>
                   Najnowsze produkty
                 </h2>
               </div>
               <Link
                 href="/produkty"
-                className="group hidden cursor-pointer items-center gap-1.5 text-sm font-medium text-white/55 transition-colors duration-200 hover:text-primary sm:flex"
+                className="group hidden cursor-pointer items-center gap-1.5 text-sm font-medium text-muted-foreground transition-colors duration-200 hover:text-primary sm:flex"
               >
                 Zobacz wszystkie
                 <ArrowUpRight className="size-4 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" aria-hidden />
@@ -169,7 +169,7 @@ export default async function HomePage() {
             <div className="mt-10 text-center sm:hidden">
               <Link
                 href="/produkty"
-                className="inline-flex cursor-pointer items-center gap-2 rounded-full border border-white/10 px-6 py-2.5 text-sm text-white/50 transition-all duration-200 hover:border-primary/40 hover:text-primary"
+                className="inline-flex cursor-pointer items-center gap-2 rounded-full border border-border px-6 py-2.5 text-sm text-muted-foreground transition-all duration-200 hover:border-primary/40 hover:text-primary"
               >
                 Zobacz wszystkie produkty
                 <ArrowUpRight className="size-4" aria-hidden />
@@ -181,13 +181,13 @@ export default async function HomePage() {
 
       {/* Categories */}
       {categories.length > 0 && (
-        <section className="border-t border-white/[0.06] py-24">
+        <section className="border-t border-border py-24">
           <div className="mx-auto max-w-7xl px-6">
             <div className="mb-12">
               <p className="section-title-line animate-fade-up mb-2 text-xs font-semibold uppercase tracking-[0.15em] text-primary">
                 Przeglądaj
               </p>
-              <h2 className="animate-fade-up text-3xl font-bold text-white sm:text-4xl" style={{ animationDelay: "60ms" }}>
+              <h2 className="animate-fade-up text-3xl font-bold text-foreground sm:text-4xl" style={{ animationDelay: "60ms" }}>
                 Kategorie
               </h2>
             </div>
@@ -229,7 +229,7 @@ export default async function HomePage() {
                         </p>
                       </div>
                       {/* Arrow */}
-                      <div className="absolute right-3 top-3 flex size-7 items-center justify-center rounded-full bg-black/50 text-white/40 backdrop-blur-sm transition-all duration-300 group-hover:bg-primary/20 group-hover:text-primary">
+                      <div className="absolute right-3 top-3 flex size-7 items-center justify-center rounded-full bg-black/40 text-white/60 backdrop-blur-sm transition-all duration-300 group-hover:bg-primary/20 group-hover:text-primary">
                         <ArrowUpRight className="size-3.5" aria-hidden />
                       </div>
                     </div>
@@ -244,14 +244,14 @@ export default async function HomePage() {
                   >
                     <div className="card-glass hover-lift-strong shimmer-on-hover flex items-center justify-between rounded-xl p-5 transition-all duration-300">
                       <div>
-                        <h3 className="font-semibold text-white/75 transition-colors duration-200 group-hover:text-white">
+                        <h3 className="font-semibold text-foreground/75 transition-colors duration-200 group-hover:text-foreground">
                           {category.name}
                         </h3>
-                        <p className="mt-0.5 text-xs text-white/45">
+                        <p className="mt-0.5 text-xs text-muted-foreground">
                           {count} {countLabel}
                         </p>
                       </div>
-                      <ArrowUpRight className="size-4 text-white/20 transition-all duration-200 group-hover:text-primary" aria-hidden />
+                      <ArrowUpRight className="size-4 text-muted-foreground/40 transition-all duration-200 group-hover:text-primary" aria-hidden />
                     </div>
                   </Link>
                 );
@@ -262,14 +262,14 @@ export default async function HomePage() {
       )}
 
       {/* CTA section */}
-      <section className="border-t border-white/[0.06] py-24">
-        <div className="relative mx-auto max-w-3xl overflow-hidden rounded-3xl border border-white/[0.08] bg-white/[0.02] px-10 py-16 text-center">
-          {/* Subtle gold glow */}
+      <section className="border-t border-border py-24">
+        <div className="relative mx-auto max-w-3xl overflow-hidden rounded-3xl border border-border bg-card px-10 py-16 text-center">
+          {/* Subtle primary glow */}
           <div
             className="pointer-events-none absolute inset-0 opacity-30"
             style={{
               background:
-                "radial-gradient(ellipse 60% 50% at 50% 100%, hsl(36 72% 70% / 0.15), transparent)",
+                "radial-gradient(ellipse 60% 50% at 50% 100%, hsl(var(--primary) / 0.12), transparent)",
             }}
             aria-hidden
           />
@@ -277,10 +277,10 @@ export default async function HomePage() {
             <p className="section-title-line animate-fade-up mx-auto mb-4 w-fit text-xs font-semibold uppercase tracking-[0.15em] text-primary">
               Poznaj nas
             </p>
-            <h2 className="animate-fade-up text-3xl font-bold text-white sm:text-4xl" style={{ animationDelay: "60ms" }}>
+            <h2 className="animate-fade-up text-3xl font-bold text-foreground sm:text-4xl" style={{ animationDelay: "60ms" }}>
               Domowe smaki, świeże każdego dnia
             </h2>
-            <p className="animate-fade-up mx-auto mt-5 max-w-lg text-sm leading-relaxed text-white/45" style={{ animationDelay: "120ms" }}>
+            <p className="animate-fade-up mx-auto mt-5 max-w-lg text-sm leading-relaxed text-muted-foreground" style={{ animationDelay: "120ms" }}>
               Poznaj naszą historię i sposób na świeże, domowe smaki. Masz pytania? Chętnie pomożemy.
             </p>
             <div
@@ -289,13 +289,13 @@ export default async function HomePage() {
             >
               <Link
                 href="/o-nas"
-                className="inline-flex cursor-pointer items-center gap-2 rounded-full border border-white/15 px-7 py-3 text-sm font-medium text-white/70 transition-all duration-300 hover:border-primary/40 hover:text-white/90"
+                className="inline-flex cursor-pointer items-center gap-2 rounded-full border border-border px-7 py-3 text-sm font-medium text-foreground/70 transition-all duration-300 hover:border-primary/40 hover:text-foreground"
               >
                 O nas
               </Link>
               <Link
                 href="/kontakt"
-                className="group inline-flex cursor-pointer items-center gap-2 rounded-full bg-primary px-7 py-3 text-sm font-semibold text-black transition-all duration-300 hover:bg-primary/90 hover:shadow-[0_0_24px_hsl(36_72%_70%/0.35)]"
+                className="group inline-flex cursor-pointer items-center gap-2 rounded-full bg-primary px-7 py-3 text-sm font-semibold text-primary-foreground transition-all duration-300 hover:bg-primary/90 hover:shadow-[0_0_24px_hsl(var(--primary)/0.35)]"
               >
                 Skontaktuj się
                 <ArrowUpRight className="size-4 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" aria-hidden />

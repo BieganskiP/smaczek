@@ -41,8 +41,8 @@ export function Navbar() {
     <header
       className={`sticky top-0 z-50 transition-all duration-300 ${
         scrolled
-          ? "border-b border-white/[0.06] bg-black/90 backdrop-blur-xl shadow-[0_1px_0_0_hsl(36_72%_70%/0.12)]"
-          : "border-b border-transparent bg-black/60 backdrop-blur-md"
+          ? "border-b border-border bg-background/90 backdrop-blur-xl shadow-[0_1px_0_0_hsl(var(--primary)/0.12)]"
+          : "border-b border-transparent bg-background/60 backdrop-blur-md"
       }`}
     >
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
@@ -68,7 +68,7 @@ export function Navbar() {
             <Link
               key={href}
               href={href}
-              className="gold-underline relative text-sm font-medium tracking-wide text-white/55 transition-colors duration-200 hover:text-white/90"
+              className="gold-underline relative text-sm font-medium tracking-wide text-muted-foreground transition-colors duration-200 hover:text-foreground"
             >
               {label}
             </Link>
@@ -81,12 +81,12 @@ export function Navbar() {
             {/* Cart */}
             <Link
               href="/koszyk"
-              className="relative flex h-9 w-9 cursor-pointer items-center justify-center rounded-full text-white/60 transition-colors duration-200 hover:bg-white/[0.06] hover:text-white/90"
+              className="relative flex h-9 w-9 cursor-pointer items-center justify-center rounded-full text-muted-foreground transition-colors duration-200 hover:bg-muted hover:text-foreground"
               aria-label="Koszyk"
             >
               <ShoppingCart className="size-[18px]" />
               {totalItems > 0 && (
-                <span className="absolute -right-0.5 -top-0.5 flex size-4 items-center justify-center rounded-full bg-primary text-[10px] font-semibold text-black">
+                <span className="absolute -right-0.5 -top-0.5 flex size-4 items-center justify-center rounded-full bg-primary text-[10px] font-semibold text-primary-foreground">
                   <span aria-hidden>{totalItems}</span>
                   <span className="sr-only">{totalItems} produktów w koszyku</span>
                 </span>
@@ -98,7 +98,7 @@ export function Navbar() {
                 {session.user?.role === "ADMIN" && (
                   <Link
                     href="/admin"
-                    className="flex h-9 cursor-pointer items-center gap-1.5 rounded-full border border-white/10 px-3 text-xs font-medium text-white/60 transition-all duration-200 hover:border-primary/40 hover:text-white/90"
+                    className="flex h-9 cursor-pointer items-center gap-1.5 rounded-full border border-border px-3 text-xs font-medium text-muted-foreground transition-all duration-200 hover:border-primary/40 hover:text-foreground"
                     aria-label="Panel admina"
                   >
                     <LayoutDashboard className="size-3.5" />
@@ -107,14 +107,14 @@ export function Navbar() {
                 )}
                 <Link
                   href="/konto"
-                  className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-full text-white/60 transition-colors duration-200 hover:bg-white/[0.06] hover:text-white/90"
+                  className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-full text-muted-foreground transition-colors duration-200 hover:bg-muted hover:text-foreground"
                   title="Moje konto"
                   aria-label="Moje konto"
                 >
                   <User className="size-[18px]" />
                 </Link>
                 <button
-                  className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-full text-white/60 transition-colors duration-200 hover:bg-white/[0.06] hover:text-white/90"
+                  className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-full text-muted-foreground transition-colors duration-200 hover:bg-muted hover:text-foreground"
                   title="Wyloguj się"
                   aria-label="Wyloguj się"
                   onClick={() => signOut({ callbackUrl: "/" })}
@@ -134,7 +134,7 @@ export function Navbar() {
 
           {/* Mobile hamburger */}
           <button
-            className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-full text-white/60 transition-colors duration-200 hover:bg-white/[0.06] hover:text-white/90 md:hidden"
+            className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-full text-muted-foreground transition-colors duration-200 hover:bg-muted hover:text-foreground md:hidden"
             onClick={() => setMobileMenuOpen((open) => !open)}
             aria-label={mobileMenuOpen ? "Zamknij menu" : "Otwórz menu"}
             aria-expanded={mobileMenuOpen}
@@ -159,7 +159,7 @@ export function Navbar() {
 
       {/* Mobile menu */}
       <div
-        className={`absolute left-0 right-0 top-16 z-40 border-b border-white/[0.06] bg-black/95 backdrop-blur-xl transition-all duration-300 ease-out md:hidden ${
+        className={`absolute left-0 right-0 top-16 z-40 border-b border-border bg-background/95 backdrop-blur-xl transition-all duration-300 ease-out md:hidden ${
           mobileMenuOpen
             ? "translate-y-0 opacity-100 pointer-events-auto"
             : "pointer-events-none -translate-y-3 opacity-0"
@@ -171,7 +171,7 @@ export function Navbar() {
             <Link
               key={href}
               href={href}
-              className={`border-b border-white/[0.05] py-3.5 text-sm font-medium tracking-wide text-white/60 transition-all duration-300 hover:text-white/90 ${
+              className={`border-b border-border py-3.5 text-sm font-medium tracking-wide text-muted-foreground transition-all duration-300 hover:text-foreground ${
                 mobileMenuOpen ? "translate-y-0 opacity-100" : "translate-y-2 opacity-0"
               }`}
               style={{ transitionDelay: mobileMenuOpen ? `${index * 40}ms` : "0ms" }}
@@ -190,12 +190,12 @@ export function Navbar() {
             <Link
               href="/koszyk"
               onClick={closeMobileMenu}
-              className="flex cursor-pointer items-center gap-3 rounded-lg border border-white/[0.06] px-4 py-3 text-sm text-white/60 transition-colors hover:border-white/10 hover:text-white/90"
+              className="flex cursor-pointer items-center gap-3 rounded-lg border border-border px-4 py-3 text-sm text-muted-foreground transition-colors hover:border-primary/30 hover:text-foreground"
             >
               <ShoppingCart className="size-4" />
               <span>Koszyk</span>
               {totalItems > 0 && (
-                <span className="ml-auto rounded-full bg-primary px-2 py-0.5 text-xs font-semibold text-black">
+                <span className="ml-auto rounded-full bg-primary px-2 py-0.5 text-xs font-semibold text-primary-foreground">
                   {totalItems}
                 </span>
               )}
@@ -207,7 +207,7 @@ export function Navbar() {
                   <Link
                     href="/admin"
                     onClick={closeMobileMenu}
-                    className="flex cursor-pointer items-center gap-3 rounded-lg border border-white/[0.06] px-4 py-3 text-sm text-white/60 transition-colors hover:border-white/10 hover:text-white/90"
+                    className="flex cursor-pointer items-center gap-3 rounded-lg border border-border px-4 py-3 text-sm text-muted-foreground transition-colors hover:border-primary/30 hover:text-foreground"
                   >
                     <LayoutDashboard className="size-4" />
                     Panel admina
@@ -216,13 +216,13 @@ export function Navbar() {
                 <Link
                   href="/konto"
                   onClick={closeMobileMenu}
-                  className="flex cursor-pointer items-center gap-3 rounded-lg border border-white/[0.06] px-4 py-3 text-sm text-white/60 transition-colors hover:border-white/10 hover:text-white/90"
+                  className="flex cursor-pointer items-center gap-3 rounded-lg border border-border px-4 py-3 text-sm text-muted-foreground transition-colors hover:border-primary/30 hover:text-foreground"
                 >
                   <User className="size-4" />
                   Moje konto
                 </Link>
                 <button
-                  className="flex cursor-pointer items-center gap-3 rounded-lg border border-white/[0.06] px-4 py-3 text-sm text-white/60 transition-colors hover:border-white/10 hover:text-white/90"
+                  className="flex cursor-pointer items-center gap-3 rounded-lg border border-border px-4 py-3 text-sm text-muted-foreground transition-colors hover:border-primary/30 hover:text-foreground"
                   onClick={() => { signOut({ callbackUrl: "/" }); closeMobileMenu(); }}
                 >
                   <LogOut className="size-4" />
