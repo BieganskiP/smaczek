@@ -6,6 +6,7 @@ import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { createPayUOrder } from "@/lib/payu";
 import { headers, cookies } from "next/headers";
+import { checkRateLimit } from "@/lib/rate-limit";
 import { sendEmail } from "@/lib/email";
 import { OrderPlacedEmail } from "@/emails/order-placed";
 
@@ -41,6 +42,16 @@ export async function createOrder(
   formData: FormData,
 ): Promise<OrderState> {
   const session = await auth();
+
+  // Rate limit order creation: 3 orders per 5 minutes per IP.
+  // Prevents bill-ramping via Resend (emails), PayU (API calls), and Neon (DB writes).
+  const headersList = await headers();
+  const ip =
+    headersList.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
+  const { allowed, retryAfterSeconds } = checkRateLimit(`order:${ip}`, 3, 5 * 60 * 1000);
+  if (!allowed) {
+    return { error: `Zbyt wiele zamówień. Spróbuj ponownie za ${retryAfterSeconds} sekund.` };
+  }
 
   const itemsRaw = formData.get("items");
   let items: { productId: string; quantity: number }[] = [];
@@ -165,10 +176,6 @@ export async function createOrder(
 
   if (payuConfigured) {
     try {
-      const headersList = await headers();
-      const ip =
-        headersList.get("x-forwarded-for")?.split(",")[0] || "127.0.0.1";
-
       const redirectUrl = await createPayUOrder({
         orderId: order.id,
         description: `Zamówienie Smaczek Kłaczek #${order.id.slice(-8)}`,
@@ -187,7 +194,7 @@ export async function createOrder(
         }),
         continueUrl: `${appUrl}/zamowienie/potwierdzenie?id=${order.id}`,
         notifyUrl: `${appUrl}/api/webhooks/payu`,
-        customerIp: ip,
+        customerIp: ip === "unknown" ? "127.0.0.1" : ip,
       });
 
       redirect(redirectUrl);
